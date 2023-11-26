@@ -8,6 +8,7 @@ use App\Http\Controllers\PermisoController;
 use App\Http\Controllers\AsignacionPermisoController;
 use App\Http\Controllers\RegionController;
 use App\Http\Controllers\DistritoController;
+use App\Http\Controllers\MunicipioController;
 
 
 //Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
@@ -22,3 +23,4 @@ Route::apiResource('permisos', PermisoController::class);
 Route::apiResource('asignacion_permisos', AsignacionPermisoController::class);
 Route::apiResource('regiones', RegionController::class);
 Route::apiResource('distritos', DistritoController::class);
+Route::apiResource('municipios', MunicipioController::class);
