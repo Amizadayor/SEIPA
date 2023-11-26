@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RolController;
+use App\Http\Controllers\UserController;
 
 
 //Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
@@ -12,3 +13,4 @@ use App\Http\Controllers\RolController;
 //Ruta: http://siipo.test/api/nombre_ruta
 
 Route::apiResource('roles', RolController::class);
+Route::apiResource('users', UserController::class);
