@@ -10,10 +10,10 @@ return new class extends Migration
     {
         Schema::create('oficinas', function (Blueprint $table) {
             $table->id();
-            $table->string('NombreOficina', 50)->notnull();
-            $table->string('Ubicacion', 100)->notnull();
-            $table->string('Telefono', 10)->notnull();
-            $table->string('Email', 40)->notnull();
+            $table->string('NombreOficina', 50)->nullable();
+            $table->string('Ubicacion', 100)->nullable();
+            $table->string('Telefono', 10)->nullable();
+            $table->string('Email', 40)->nullable();
             $table->timestamps();
         });
     }
