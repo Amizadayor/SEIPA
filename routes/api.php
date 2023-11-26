@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RolController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PermisoController;
+use App\Http\Controllers\AsignacionPermisoController;
 
 
 //Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
@@ -16,3 +17,4 @@ use App\Http\Controllers\PermisoController;
 Route::apiResource('roles', RolController::class);
 Route::apiResource('users', UserController::class);
 Route::apiResource('permisos', PermisoController::class);
+Route::apiResource('asignacion_permisos', AsignacionPermisoController::class);
