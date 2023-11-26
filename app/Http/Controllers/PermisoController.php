@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
 use App\Models\Permiso;
 use App\Http\Responses\ApiResponse;
 use Illuminate\Http\Request;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Validation\ValidationException;
-use Exception;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class PermisoController extends Controller
 {
@@ -31,7 +31,7 @@ class PermisoController extends Controller
     {
         try {
             $request->validate([
-                'NombrePermiso' => 'required|string|unique:privilegios',
+                'NombrePermiso' => 'required|string|unique:permisos',
             ]);
             $permisos = Permiso::create($request->all());
             return ApiResponse::success('Permiso creado exitosamente', 201, $permisos);
@@ -60,7 +60,7 @@ class PermisoController extends Controller
     {
         try {
             $request->validate([
-                'NombrePermiso' => 'required|string|unique:privilegios',
+                'NombrePermiso' => 'required|string|unique:permisos',
             ]);
             $permisos = Permiso::findOrFail($id);
             $permisos->update($request->all());
