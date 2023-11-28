@@ -85,14 +85,13 @@ CREATE TABLE oficinas ( -- Tabla para las oficinas
 
 
 
-CREATE TABLE unidad_economica_pa_fisico ( -- Tabla para las unidades económicas de personas físicas
+CREATE TABLE unidades_economicas_pa_fisico ( -- Tabla para las unidades económicas de personas físicas
     id INT AUTO_INCREMENT PRIMARY KEY NOT NULL, -- Identificador de la unidad económica
     Ofcid INT NOT NULL, -- Identificador de la oficina
-    Locid INT NOT NULL, -- Identificador de la localidad
     FechaRegistro DATE NOT NULL, -- Fecha de registro de la unidad económica
     RNPA VARCHAR(10), -- RNPA del pescador o acuicultor fisico
     CURP VARCHAR(18) UNIQUE NOT NULL, -- CURP del pescador o acuicultor fisico
-    RFC VARCHAR(12), -- Rfc del pescador o acuicultor fisico
+    RFC VARCHAR(13), -- Rfc del pescador o acuicultor fisico
     Nombres VARCHAR(50) NOT NULL, -- Nombres del pescador o acuicultor fisico
     ApPaterno VARCHAR(30) NOT NULL, -- Apaterno del pescador o acuicultor fisico
     ApMaterno VARCHAR(30) NOT NULL, -- Apaterno del pescador o acuicultor fisico
@@ -104,20 +103,17 @@ CREATE TABLE unidad_economica_pa_fisico ( -- Tabla para las unidades económicas
     NmExterior VARCHAR(6) NOT NULL, -- Número exterior del domicilio
     NmInterior VARCHAR(6) NOT NULL, -- Número interior del domicilio
     CodigoPostal VARCHAR(10), -- Código postal del domicilio
-    Colonia VARCHAR(100) NOT NULL, -- Colonia del domicilio
+    Locid INT NOT NULL, -- Identificador de la localidad
     IniOperaciones DATE NOT NULL, -- Fecha de inicio de operaciones del pescador o acuicultor fisico
     ActivoEmbMayor BOOLEAN DEFAULT FALSE NOT NULL, -- Indica si el pescador o acuicultor fisico tiene embarcaciones mayores
     ActivoEmbMenor BOOLEAN DEFAULT FALSE NOT NULL, -- Indica si el pescador o acuicultor fisico tiene embarcaciones menores
     ActvAcuacultura BOOLEAN DEFAULT FALSE NOT NULL, -- Indica si el pescador o acuicultor fisico tiene actividad de acuacultura
     ActvPesca BOOLEAN DEFAULT FALSE NOT NULL, -- Indica si el pescador o acuicultor fisico tiene actividad de pesca
-    DocActaNacimiento VARCHAR(255) NOT NULL, -- Documento de acta de nacimiento del representante de la cooperativa
-    DocComprobanteDomicilio VARCHAR(255) NOT NULL, -- Documento de comprobante de domicilio de la cooperativa
-    DocCURP VARCHAR(255) NOT NULL, -- Documento de CURP del representante de la cooperativa
-    DocIdentificacionOfc VARCHAR(255) NOT NULL, -- Documento de identificación oficial del representante de la cooperativa
-    DocRFC VARCHAR(255) NOT NULL, -- Documento de RFC de la cooperativa
-    DocActaConstitutiva VARCHAR(255) NOT NULL, -- Documento de acta constitutiva de la cooperativa
-    DocActaAsamblea VARCHAR(255) NOT NULL, -- Documento de acta de asamblea de la cooperativa
-    DocRepresentanteLegal VARCHAR(255) NOT NULL, -- Documento del representante de la cooperativa
+    DocActaNacimiento VARCHAR(255) NOT NULL, -- Documento de acta de nacimiento del pescador o acuicultor fisico
+    DocComprobanteDomicilio VARCHAR(255) NOT NULL, -- Documento de comprobante de domicilio del pescador o acuicultor fisico
+    DocCURP VARCHAR(255) NOT NULL, -- Documento de CURP del pescador o acuicultor fisico
+    DocIdentificacionOfc VARCHAR(255) NOT NULL, -- Documento de identificación oficial del pescador o acuicultor fisico
+    DocRFC VARCHAR(255) NOT NULL, -- Documento de RFC del pescador o acuicultor fisico
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (Ofcid) REFERENCES oficinas(id), -- Llave foránea de la oficina con el identificador de la oficina-Ofcid
@@ -132,7 +128,7 @@ CREATE TABLE telefonos_pa_fisico ( -- Tabla para los teléfonos de las unidades 
     UEPAFid INT NOT NULL, -- Identificador de la unidad económica
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (UEPAFid) REFERENCES unidad_economica_pa_fisico(id) -- Llave foránea de la unidad económica con el identificador de la unidad económica-UEPAFid
+    FOREIGN KEY (UEPAFid) REFERENCES unidades_economicas_pa_fisico(id) -- Llave foránea de la unidad económica con el identificador de la unidad económica-UEPAFid
 );
 
 CREATE TABLE artes_pesca ( -- Tabla para las artes de pesca
@@ -180,7 +176,7 @@ CREATE TABLE permisos_pesca_por_pa_fisico ( -- Tabla para los permisos de pesca 
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (TPPPescaid) REFERENCES permisos_pesca(id), -- Llave foránea del permiso de pesca con el identificador del permiso de pesca-TPPPescaid
-    FOREIGN KEY (UEPAFid) REFERENCES unidad_economica_pa_fisico(id) -- Llave foránea de la unidad económica con el identificador de la unidad económica-UEPAFid
+    FOREIGN KEY (UEPAFid) REFERENCES unidades_economicas_pa_fisico(id) -- Llave foránea de la unidad económica con el identificador de la unidad económica-UEPAFid
 );
 
 CREATE TABLE artes_pesca_permisos_pa_fisico ( -- Tabla para las artes de pesca por permiso de pesca por persona física
@@ -216,12 +212,14 @@ CREATE TABLE unidad_economica_pa_moral ( -- Tabla para las unidades económicas 
     ActivoEmbMayor BOOLEAN DEFAULT FALSE NOT NULL, -- Indica si la cooperativa tiene embarcaciones mayores
     ActivoEmbMenor BOOLEAN DEFAULT FALSE NOT NULL, -- Indica si la cooperativa tiene embarcaciones menores
     CantidadPescadores INT, -- Cantidad de pescadores de la cooperativa
-
+    DocActaConstitutiva VARCHAR(255) NOT NULL, -- Documento de acta constitutiva de la cooperativa
+    DocActaAsamblea VARCHAR(255) NOT NULL, -- Documento de acta de asamblea de la cooperativa
+    DocRepresentanteLegal VARCHAR(255) NOT NULL, -- Documento del representante de la cooperativa
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (Ofcid) REFERENCES oficinas(id), -- Llave foránea de la oficina con el identificador de la oficina-Ofcid
     FOREIGN KEY (Locid) REFERENCES localidades(id), -- Llave foránea de la localidad con el identificador de la localidad-Locid
-    FOREIGN KEY (UEDuenoid) REFERENCES unidad_economica_pa_fisico(id) -- Llave foránea de la unidad económica de cooperativas con el identificador de la unidad económica de cooperativas-UEDuenoid
+    FOREIGN KEY (UEDuenoid) REFERENCES unidades_economicas_pa_fisico(id) -- Llave foránea de la unidad económica de cooperativas con el identificador de la unidad económica de cooperativas-UEDuenoid
 );
 
 CREATE TABLE telefonos_pa_moral ( -- Tabla para los teléfonos de las unidades económicas de cooperativas
