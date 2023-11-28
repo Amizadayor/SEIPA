@@ -37,7 +37,6 @@ return new class extends Migration
             $table->string('DocCURP', 255)->nullable();
             $table->string('DocIdentificacionOfc', 255)->nullable();
             $table->string('DocRFC', 255)->nullable();
-
             $table->foreign('Locid')->references('id')->on('localidades');
             $table->foreign('Ofcid')->references('id')->on('oficinas');
             $table->timestamps();
