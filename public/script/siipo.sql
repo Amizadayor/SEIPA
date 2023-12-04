@@ -109,6 +109,10 @@ CREATE TABLE unidades_economicas_pa_fisico ( -- Tabla para las unidades económi
     ActivoEmbMenor BOOLEAN DEFAULT FALSE NOT NULL, -- Indica si el pescador o acuicultor fisico tiene embarcaciones menores
     ActvAcuacultura BOOLEAN DEFAULT FALSE NOT NULL, -- Indica si el pescador o acuicultor fisico tiene actividad de acuacultura
     ActvPesca BOOLEAN DEFAULT FALSE NOT NULL, -- Indica si el pescador o acuicultor fisico tiene actividad de pesca
+    NmPrincipal VARCHAR(10) NOT NULL, -- Número del teléfono principal
+    TpPrincipal VARCHAR(20) NOT NULL, -- Tipo del teléfono principal
+    NmSecundario VARCHAR(10) NOT NULL, -- Número del teléfono secundario
+    TpSecundario VARCHAR(20) NOT NULL, -- Tipo del teléfono secundario
     DocActaNacimiento VARCHAR(255) NOT NULL, -- Documento de acta de nacimiento del pescador o acuicultor fisico
     DocComprobanteDomicilio VARCHAR(255) NOT NULL, -- Documento de comprobante de domicilio del pescador o acuicultor fisico
     DocCURP VARCHAR(255) NOT NULL, -- Documento de CURP del pescador o acuicultor fisico
@@ -118,17 +122,6 @@ CREATE TABLE unidades_economicas_pa_fisico ( -- Tabla para las unidades económi
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (Ofcid) REFERENCES oficinas(id), -- Llave foránea de la oficina con el identificador de la oficina-Ofcid
     FOREIGN KEY (Locid) REFERENCES localidades(id) -- Llave foránea de la localidad con el identificador de la localidad-Locid
-);
-
-CREATE TABLE telefonos_pa_fisico ( -- Tabla para los teléfonos de las unidades económicas de personas físicas
-    id INT AUTO_INCREMENT PRIMARY KEY NOT NULL, -- Identificador del teléfono
-    Numero VARCHAR(10) NOT NULL, -- Número del teléfono
-    NumeroPrincipal BOOLEAN DEFAULT FALSE NOT NULL, -- Indica si el teléfono es el principal
-    Tipo VARCHAR(20) NOT NULL, -- Tipo de teléfono
-    UEPAFid INT NOT NULL, -- Identificador de la unidad económica
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (UEPAFid) REFERENCES unidades_economicas_pa_fisico(id) -- Llave foránea de la unidad económica con el identificador de la unidad económica-UEPAFid
 );
 
 CREATE TABLE artes_pesca ( -- Tabla para las artes de pesca
@@ -205,7 +198,10 @@ CREATE TABLE unidad_economica_pa_moral ( -- Tabla para las unidades económicas 
     NmInterior VARCHAR(6) NOT NULL, -- Número interior del domicilio
     CodigoPostal VARCHAR(10), -- Código postal del domicilio
     LocID INT NOT NULL, -- Identificador de la localidad
-    Colonia VARCHAR(100) NOT NULL, -- Colonia del domicilio
+    NmPrincipal VARCHAR(10) NOT NULL, -- Número del teléfono principal
+    TpPrincipal VARCHAR(20) NOT NULL, -- Tipo del teléfono principal
+    NmSecundario VARCHAR(10) NOT NULL, -- Número del teléfono secundario
+    TpSecundario VARCHAR(20) NOT NULL, -- Tipo del teléfono secundario
     IniOperaciones DATE NOT NULL, -- Fecha de inicio de operaciones de la cooperativa
     ActvAcuacultura BOOLEAN DEFAULT FALSE NOT NULL, -- Indica si la cooperativa es de actividad de acuacultura
     ActvPesca BOOLEAN DEFAULT FALSE NOT NULL, -- Indica si la cooperativa es de actividad de pesca
@@ -220,17 +216,6 @@ CREATE TABLE unidad_economica_pa_moral ( -- Tabla para las unidades económicas 
     FOREIGN KEY (Ofcid) REFERENCES oficinas(id), -- Llave foránea de la oficina con el identificador de la oficina-Ofcid
     FOREIGN KEY (Locid) REFERENCES localidades(id), -- Llave foránea de la localidad con el identificador de la localidad-Locid
     FOREIGN KEY (UEDuenoid) REFERENCES unidades_economicas_pa_fisico(id) -- Llave foránea de la unidad económica de cooperativas con el identificador de la unidad económica de cooperativas-UEDuenoid
-);
-
-CREATE TABLE telefonos_pa_moral ( -- Tabla para los teléfonos de las unidades económicas de cooperativas
-    id INT AUTO_INCREMENT PRIMARY KEY NOT NULL, -- Identificador del teléfono
-    Numero VARCHAR(10) NOT NULL, -- Número del teléfono
-    NumeroPrincipal BOOLEAN DEFAULT FALSE NOT NULL, -- Indica si el teléfono es el principal
-    Tipo VARCHAR(20) NOT NULL, -- Tipo del teléfono
-    UEPAMid INT NOT NULL, -- Identificador de la unidad económica
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (UEPAMid) REFERENCES unidad_economica_pa_moral(id) -- Llave foránea de la unidad económica con el identificador de la unidad económica-UEPAMid
 );
 
 CREATE TABLE socios_detalles_pa_moral ( -- Tabla para los socios de las unidades económicas de cooperativas
