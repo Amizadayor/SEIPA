@@ -27,6 +27,10 @@ return new class extends Migration
             $table->string('NmInterior', 6)->nullable();
             $table->string('CodigoPostal', 10)->nullable();
             $table->unsignedBigInteger('Locid');
+            $table->string('NmPrincipal', 10)->nullable();
+            $table->string('TpNmPrincipal', 20)->nullable();
+            $table->string('NmSecundario', 10)->nullable();
+            $table->string('TpNmSecundario', 20)->nullable();
             $table->date('IniOperaciones')->nullable();
             $table->boolean('ActivoEmbMayor')->default(false);
             $table->boolean('ActivoEmbMenor')->default(false);
