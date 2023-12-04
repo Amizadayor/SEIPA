@@ -173,7 +173,8 @@ class UnidadEconomicaPAFisicoController extends Controller
     {
         try {
             $request->validate([
-                'Ofcid' => 'required|exists:oficinas,id',
+                //'Ofcid' => 'required|exists:oficinas,id',
+                'Ofcid' => 'required',
                 'FechaRegistro' => 'required|date',
                 'RNPA' => 'required|string|max:50',
                 'CURP' => 'required|string|max:18',
@@ -189,7 +190,8 @@ class UnidadEconomicaPAFisicoController extends Controller
                 'NmExterior' => 'required|string|max:6',
                 'NmInterior' => 'nullable|string|max:6',
                 'CodigoPostal' => 'required|string|max:10',
-                'Locid' => 'required|exists:localidades,id',
+                //'Locid' => 'required|exists:localidades,id',
+                'Locid' => 'required',
                 'IniOperaciones' => 'required|date',
                 'ActivoEmbMayor' => 'required|boolean',
                 'ActivoEmbMenor' => 'required|boolean',
