@@ -12,8 +12,6 @@ use App\Http\Controllers\MunicipioController;
 use App\Http\Controllers\LocalidadController;
 use App\Http\Controllers\OficinaController;
 use App\Http\Controllers\UnidadEconomicaPAFisicoController;
-use App\Http\Controllers\TelefonoPaFisicoController;
-
 
 //Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
     //return $request->user();
@@ -31,4 +29,3 @@ Route::apiResource('municipios', MunicipioController::class);
 Route::apiResource('localidades', LocalidadController::class);
 Route::apiResource('oficinas', OficinaController::class);
 Route::apiResource('unidades_economicas_pa_fisico', UnidadEconomicaPAFisicoController::class);
-Route::apiResource('telefonos_pa_fisico', TelefonoPaFisicoController::class);
