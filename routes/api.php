@@ -14,6 +14,7 @@ use App\Http\Controllers\OficinaController;
 use App\Http\Controllers\UnidadEconomicaPAFisicoController;
 use App\Http\Controllers\ArtePescaController;
 use App\Http\Controllers\EspecieController;
+use App\Http\Controllers\ProductoController;
 
 //Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
     //return $request->user();
@@ -33,3 +34,4 @@ Route::apiResource('oficinas', OficinaController::class);
 Route::apiResource('unidades_economicas_pa_fisico', UnidadEconomicaPAFisicoController::class);
 Route::apiResource('artes_pesca', ArtePescaController::class);
 Route::apiResource('especies', EspecieController::class);
+Route::apiResource('productos', ProductoController::class);
