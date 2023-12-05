@@ -196,7 +196,8 @@ CREATE TABLE unidades_economicas_pa_moral ( -- Tabla para las unidades económic
 CREATE TABLE socios_detalles_pa_moral ( -- Tabla para los socios de las unidades económicas de cooperativas
     id INT AUTO_INCREMENT PRIMARY KEY NOT NULL, -- Identificador del socio
     CURP VARCHAR(18) NOT NULL, -- CURP del socio
-    TipoPA BOOLEAN DEFAULT TRUE NOT NULL, -- Indica si el socio es pescador o acuicultor
+    ActvPesca BOOLEAN DEFAULT TRUE NOT NULL, -- Indica si el socio es pescador o acuicultor
+    ActvAcuacultura BOOLEAN DEFAULT TRUE NOT NULL, -- Indica si el socio es pescador o acuicultor
     DocActaNacimiento VARCHAR(255) NOT NULL, -- Documento de acta de nacimiento del socio
     DocComprobanteDomicilio VARCHAR(255) NOT NULL, -- Documento de comprobante de domicilio del socio
     DocCURP VARCHAR(255) NOT NULL, -- Documento de CURP del socio
