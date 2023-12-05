@@ -157,34 +157,9 @@ CREATE TABLE permisos_pesca ( -- Tabla para los permisos de pesca
     FOREIGN KEY (TPEspecieid) REFERENCES especies(id) -- Llave foránea de la especie con el identificador de la especie-TPEspecieid
 );
 
-CREATE TABLE permisos_pesca_por_pa_fisico ( -- Tabla para los permisos de pesca por persona física
-    id INT AUTO_INCREMENT PRIMARY KEY NOT NULL, -- Tabla para los permisos de pesca por persona física
-    FolioPermiso VARCHAR(50) UNIQUE NOT NULL, -- Folio del permiso de pesca
-    FechaExpedicion DATE NOT NULL, -- Fecha de expedición del permiso de pesca
-    FechaVigencia DATE NOT NULL, -- Fecha de vigencia del permiso de pesca
-    EstatusPermiso BOOLEAN DEFAULT FALSE NOT NULL, -- Indica si el permiso de pesca está activo o no
-    Nota TEXT, -- Nota del permiso de pesca
-    TPPPescaid INT NOT NULL, -- Identificador del permiso de pesca
-    UEPAFid INT NOT NULL, -- Identificador de la unidad económica
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (TPPPescaid) REFERENCES permisos_pesca(id), -- Llave foránea del permiso de pesca con el identificador del permiso de pesca-TPPPescaid
-    FOREIGN KEY (UEPAFid) REFERENCES unidades_economicas_pa_fisico(id) -- Llave foránea de la unidad económica con el identificador de la unidad económica-UEPAFid
-);
-
-CREATE TABLE artes_pesca_permisos_pa_fisico ( -- Tabla para las artes de pesca por permiso de pesca por persona física
-    id INT AUTO_INCREMENT PRIMARY KEY NOT NULL, -- Identificador de la tabla
-    TPArtPescaid INT NOT NULL, -- Identificador del arte de pesca
-    PPPAFid INT NOT NULL, -- Identificador del permiso de pesca
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (PPPAFid) REFERENCES permisos_pesca_por_pa_fisico(id), -- Llave foránea del permiso de pesca con el identificador del permiso de pesca-PPPAFid
-    FOREIGN KEY (TPArtPescaid) REFERENCES artes_pesca(id) -- Llave foránea del arte de pesca con el identificador del arte de pesca-TPArtPescaid
-);
 
 
-
-CREATE TABLE unidad_economica_pa_moral ( -- Tabla para las unidades económicas para las cooperativas
+CREATE TABLE unidades_economicas_pa_moral ( -- Tabla para las unidades económicas para las cooperativas
     id INT AUTO_INCREMENT PRIMARY KEY NOT NULL, -- Identificador de la unidad económica
     UEDuenoid INT NOT NULL, -- Identificador de la unidad económica de cooperativas
     Ofcid INT NOT NULL, -- Identificador de la oficina
@@ -230,33 +205,10 @@ CREATE TABLE socios_detalles_pa_moral ( -- Tabla para los socios de las unidades
     UEPAMid INT NOT NULL, -- Identificador de la unidad económica de cooperativas
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (UEPAMid) REFERENCES unidad_economica_pa_moral(id) -- Llave foránea de la unidad económica de cooperativas con el identificador de la unidad económica de cooperativas-UEPAMid
+    FOREIGN KEY (UEPAMid) REFERENCES unidades_economicas_pa_moral(id) -- Llave foránea de la unidad económica de cooperativas con el identificador de la unidad económica de cooperativas-UEPAMid
 );
 
-CREATE TABLE permisos_pesca_por_pa_moral( -- Tabla para los permisos de pesca por unidad económica de cooperativas
-    id INT AUTO_INCREMENT PRIMARY KEY NOT NULL, -- Identificador del permiso de pesca
-    FolioPermiso VARCHAR(50) UNIQUE NOT NULL, -- Folio del permiso de pesca
-    FechaExpedicion DATE NOT NULL, -- Fecha de expedición del permiso de pesca
-    FechaVigencia DATE NOT NULL, -- Fecha de vigencia del permiso de pesca
-    EstatusPermiso BOOLEAN DEFAULT FALSE NOT NULL, -- Indica si el permiso de pesca está activo o no
-    Nota TEXT, -- Nota del permiso de pesca
-    TPPPescaid INT NOT NULL, -- Identificador del permiso de pesca
-    UEPAMid INT NOT NULL, -- Identificador de la unidad económica de cooperativas
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (TPPPescaid) REFERENCES permisos_pesca(id), -- Llave foránea del permiso de pesca con el identificador del permiso de pesca-TPPPescaid
-    FOREIGN KEY (UEPAMid) REFERENCES unidad_economica_pa_moral(id) -- Llave foránea de la unidad económica de cooperativas con el identificador de la unidad económica de cooperativas-UEPAMid
-);
 
-CREATE TABLE artes_pesca_permisos_pa_moral( -- Tabla para las artes de pesca por permiso de pesca por unidad económica de cooperativas
-    id INT AUTO_INCREMENT PRIMARY KEY NOT NULL, -- Identificador de la tabla
-    TPArtPescaid INT NOT NULL, -- Identificador del arte de pesca
-    PPPAMid INT NOT NULL, -- Identificador del permiso de pesca
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (PPPAMid) REFERENCES permisos_pesca_por_pa_moral(id), -- Llave foránea del permiso de pesca con el identificador del permiso de pesca-PPPAMid
-    FOREIGN KEY (TPArtPescaid) REFERENCES artes_pesca(id) -- Llave foránea del arte de pesca con el identificador del arte de pesca-TPArtPescaid
-);
 
 CREATE TABLE tipos_actividad ( -- Tabla para los tipos de actividad
     id INT AUTO_INCREMENT PRIMARY KEY NOT NULL, -- Identificador del tipo de actividad
@@ -279,9 +231,7 @@ CREATE TABLE materiales_casco ( -- Tabla para los materiales de casco
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
-
-
-CREATE TABLE unidad_economica_emb_ma (
+CREATE TABLE unidades_economicas_emb_ma (
     id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
     RNPA VARCHAR(10),
     Nombre VARCHAR(50) NOT NULL,
@@ -309,18 +259,10 @@ CREATE TABLE unidad_economica_emb_ma (
     DocCertificadoSegEmbs VARCHAR(255) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (UEDuenoid) REFERENCES unidad_economica_pa_fisico(id),
+    FOREIGN KEY (UEDuenoid) REFERENCES unidades_economicas_pa_fisico(id),
     FOREIGN KEY (TPActid) REFERENCES tipos_actividad(id),
     FOREIGN KEY (TPCubid) REFERENCES tipos_cubierta(id),
     FOREIGN KEY (MtrlCascoid) REFERENCES materiales_casco(id)
-);
-
-CREATE TABLE embarcaciones_mayores_por_pa (
-    id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
-    UEEMMAid INT NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (UEEMMAid) REFERENCES unidad_economica_emb_ma(id)
 );
 
 CREATE TABLE equipos_deteccion (
@@ -379,7 +321,7 @@ CREATE TABLE artes_pesca_emb_ma (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (TPArtPescaid) REFERENCES artes_pesca(id),
-    FOREIGN KEY (UEEMMAid) REFERENCES unidad_economica_emb_ma(id)
+    FOREIGN KEY (UEEMMAid) REFERENCES unidades_economicas_emb_ma(id)
 );
 
 CREATE TABLE equipos_deteccion_emb_ma (
@@ -389,7 +331,7 @@ CREATE TABLE equipos_deteccion_emb_ma (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (EqpoDeteccionid) REFERENCES equipos_deteccion(id),
-    FOREIGN KEY (UEEMMAid) REFERENCES unidad_economica_emb_ma(id)
+    FOREIGN KEY (UEEMMAid) REFERENCES unidades_economicas_emb_ma(id)
 );
 
 CREATE TABLE sistemas_conservacion_emb_ma (
@@ -399,7 +341,7 @@ CREATE TABLE sistemas_conservacion_emb_ma (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (SisConservacionid) REFERENCES sistemas_conservacion(id),
-    FOREIGN KEY (UEEMMAid) REFERENCES unidad_economica_emb_ma(id)
+    FOREIGN KEY (UEEMMAid) REFERENCES unidades_economicas_emb_ma(id)
 );
 
 CREATE TABLE especies_emb_ma (
@@ -409,7 +351,7 @@ CREATE TABLE especies_emb_ma (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (TPEspecieid) REFERENCES especies(id),
-    FOREIGN KEY (UEEMMAid) REFERENCES unidad_economica_emb_ma(id)
+    FOREIGN KEY (UEEMMAid) REFERENCES unidades_economicas_emb_ma(id)
 );
 
 CREATE TABLE equipos_seguridad_emb_ma (
@@ -419,7 +361,7 @@ CREATE TABLE equipos_seguridad_emb_ma (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (EqpoSeguridadid) REFERENCES equipos_seguridad(id),
-    FOREIGN KEY (UEEMMAid) REFERENCES unidad_economica_emb_ma(id)
+    FOREIGN KEY (UEEMMAid) REFERENCES unidades_economicas_emb_ma(id)
 );
 
 CREATE TABLE equipos_salvamento_emb_ma (
@@ -429,7 +371,7 @@ CREATE TABLE equipos_salvamento_emb_ma (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (EqpoSalvamentoid) REFERENCES equipos_salvamento(id),
-    FOREIGN KEY (UEEMMAid) REFERENCES unidad_economica_emb_ma(id)
+    FOREIGN KEY (UEEMMAid) REFERENCES unidades_economicas_emb_ma(id)
 );
 
 CREATE TABLE equipos_contraindencio_emb_ma (
@@ -439,7 +381,7 @@ CREATE TABLE equipos_contraindencio_emb_ma (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (EqpoContraIncendioid) REFERENCES equipos_contraindencio(id),
-    FOREIGN KEY (UEEMMAid) REFERENCES unidad_economica_emb_ma(id)
+    FOREIGN KEY (UEEMMAid) REFERENCES unidades_economicas_emb_ma(id)
 );
 
 CREATE TABLE equipos_comunicacion_emb_ma (
@@ -449,7 +391,7 @@ CREATE TABLE equipos_comunicacion_emb_ma (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (EqpoComunicacionid) REFERENCES equipos_comunicacion(id),
-    FOREIGN KEY (UEEMMAid) REFERENCES unidad_economica_emb_ma(id)
+    FOREIGN KEY (UEEMMAid) REFERENCES unidades_economicas_emb_ma(id)
 );
 
 CREATE TABLE equipos_navegacion_emb_ma (
@@ -459,7 +401,7 @@ CREATE TABLE equipos_navegacion_emb_ma (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (EqpoNavegacionid) REFERENCES equipos_navegacion(id),
-    FOREIGN KEY (UEEMMAid) REFERENCES unidad_economica_emb_ma(id)
+    FOREIGN KEY (UEEMMAid) REFERENCES unidades_economicas_emb_ma(id)
 );
 
 CREATE TABLE motores_emb_ma (
@@ -472,7 +414,7 @@ CREATE TABLE motores_emb_ma (
     UEEMMAid INT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (UEEMMAid) REFERENCES unidad_economica_emb_ma(id)
+    FOREIGN KEY (UEEMMAid) REFERENCES unidades_economicas_emb_ma(id)
 );
 
 CREATE TABLE motores_por_emb_ma (
@@ -481,7 +423,7 @@ CREATE TABLE motores_por_emb_ma (
     MtrEmbMaid INT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (UEEMMAid) REFERENCES unidad_economica_emb_ma(id),
+    FOREIGN KEY (UEEMMAid) REFERENCES unidades_economicas_emb_ma(id),
     FOREIGN KEY (MtrEmbMaid) REFERENCES motores_emb_ma(id)
 );
 
@@ -504,7 +446,7 @@ CREATE TABLE artes_equipo_pesca_emb_ma (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (TPArtPescaid) REFERENCES artes_pesca(id),
     FOREIGN KEY (TPEspecieid) REFERENCES especies(id),
-    FOREIGN KEY (UEEMMAid) REFERENCES unidad_economica_emb_ma(id)
+    FOREIGN KEY (UEEMMAid) REFERENCES unidades_economicas_emb_ma(id)
 );
 
 CREATE TABLE artes_equipo_pesca_por_emb_ma (
@@ -514,7 +456,7 @@ CREATE TABLE artes_equipo_pesca_por_emb_ma (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (ArteEquipoPescaEmbMaid) REFERENCES artes_equipo_pesca_emb_ma(id),
-    FOREIGN KEY (UEEMMAid) REFERENCES unidad_economica_emb_ma(id)
+    FOREIGN KEY (UEEMMAid) REFERENCES unidades_economicas_emb_ma(id)
 );
 
 CREATE TABLE costos_operaciones_emb_ma (
@@ -535,12 +477,22 @@ CREATE TABLE costos_operaciones_emb_ma (
     UEEMMAid INT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (UEEMMAid) REFERENCES unidad_economica_emb_ma(id)
+    FOREIGN KEY (UEEMMAid) REFERENCES unidades_economicas_emb_ma(id)
+);
+
+CREATE TABLE costos_operaciones_por_emb_ma (
+    id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    UEEMMAid INT NOT NULL,
+    COEMMAid INT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (UEEMMAid) REFERENCES unidades_economicas_emb_ma(id),
+    FOREIGN KEY (COEMMA) REFERENCES costos_operaciones_emb_ma(id)
 );
 
 
 
-CREATE TABLE unidad_economica_emb_me(
+CREATE TABLE unidades_economicas_emb_me(
     id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
     RNPA VARCHAR(10),
     Nombre VARCHAR(100) NOT NULL,
@@ -557,19 +509,10 @@ CREATE TABLE unidad_economica_emb_me(
     DocCertificadoSeguridad VARCHAR(255) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (UEDueno) REFERENCES unidad_economica_pa_fisico(id),
+    FOREIGN KEY (UEDueno) REFERENCES unidades_economicas_pa_fisico(id),
     FOREIGN KEY (TPActid) REFERENCES tipos_actividad(id),
     FOREIGN KEY (MtrlCascoid) REFERENCES materiales_casco(id)
 );
-
-CREATE TABLE embarcaciones_menores_por_pa (
-    id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
-    UEEMMEid INT NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (UEEMMEid) REFERENCES unidad_economica_emb_me(id)
-);
-
 
 CREATE TABLE tipos_motor (
     id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
@@ -589,7 +532,7 @@ CREATE TABLE motores_emb_me (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (TPMotorid) REFERENCES tipos_motor(id),
-    FOREIGN KEY (UEEMMEid) REFERENCES unidad_economica_emb_me(id)
+    FOREIGN KEY (UEEMMEid) REFERENCES unidades_economicas_emb_me(id)
 );
 
 CREATE TABLE motores_por_emb_me (
@@ -598,9 +541,10 @@ CREATE TABLE motores_por_emb_me (
     MtrEmbMeid INT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (UEEMMEid) REFERENCES unidad_economica_emb_me(id),
+    FOREIGN KEY (UEEMMEid) REFERENCES unidades_economicas_emb_me(id),
     FOREIGN KEY (MtrEmbMeid) REFERENCES motores_emb_me(id)
-);}
+);
+
 CREATE TABLE artes_equipo_pesca_emb_me (
     id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
     TPArtPescaid INT NOT NULL,
@@ -620,7 +564,7 @@ CREATE TABLE artes_equipo_pesca_emb_me (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (TPArtPescaid) REFERENCES artes_pesca(id),
     FOREIGN KEY (TPEspecieid) REFERENCES especies(id),
-    FOREIGN KEY (UEEMMEid) REFERENCES unidad_economica_emb_me(id)
+    FOREIGN KEY (UEEMMEid) REFERENCES unidades_economicas_emb_me(id)
 );
 
 CREATE TABLE artes_equipo_pesca_por_emb_me (
@@ -630,19 +574,17 @@ CREATE TABLE artes_equipo_pesca_por_emb_me (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (ArteEquipoPescaEmbMeid) REFERENCES artes_equipo_pesca_emb_me(id),
-    FOREIGN KEY (UEEMMEid) REFERENCES unidad_economica_emb_me(id)
+    FOREIGN KEY (UEEMMEid) REFERENCES unidades_economicas_emb_me(id)
 );
 
-
-CREATE TABLE unidad_economica_ia (
+CREATE TABLE unidades_economicas_ia (
     id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
     RNPA VARCHAR(10),
     Nombre VARCHAR(100) NOT NULL,
-    Cambio BOOLEAN DEFAULT FALSE,
+    Propietario BOOLEAN DEFAULT FALSE,
     Arrendado BOOLEAN DEFAULT FALSE,
     UEDueno INT NOT NULL,
     NombreInstalacion VARCHAR(50) NOT NULL,
-    Ubicacion VARCHAR(100) NOT NULL,
     Locid INT NOT NULL,
     Acceso TEXT NOT NULL,
     UsoComercial BOOLEAN DEFAULT FALSE,
@@ -671,28 +613,20 @@ CREATE TABLE unidad_economica_ia (
     DocMapaLocalizacion VARCHAR(255) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (UEDueno) REFERENCES unidad_economica_pa_fisico(id),
+    FOREIGN KEY (UEDueno) REFERENCES unidades_economicas_pa_fisico(id),
     FOREIGN KEY (Locid) REFERENCES localidades(id)
-);
-
-CREATE TABLE especies_objetivo (
-    id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
-    CpProduccionMiles INT NOT NULL,
-    CpProduccionToneladas DECIMAL(10, 2) NOT NULL DEFAULT 0,
-    TPEspeciesid INT NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (TPEspeciesid) REFERENCES especies(id)
 );
 
 CREATE TABLE especies_objetivo_por_ia (
     id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
     UEIAid INT NOT NULL,
-    EspecieOid INT NOT NULL,
+    EspObjetivoid INT NOT NULL,
+    CpProduccionMiles INT NOT NULL,
+    CpProduccionToneladas DECIMAL(10, 2) NOT NULL DEFAULT 0,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (UEIAid) REFERENCES unidad_economica_ia(id),
-    FOREIGN KEY (EspecieOid) REFERENCES especies_objetivo(id)
+    FOREIGN KEY (UEIAid) REFERENCES unidades_economicas_ia(id),
+    FOREIGN KEY (EspObjetivoid) REFERENCES especies(id)
 );
 
 CREATE TABLE tipos_activo (
@@ -722,7 +656,7 @@ CREATE TABLE activos_produccion_ia (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (TPActivoid) REFERENCES tipos_activo(id),
-    FOREIGN KEY (UEIAid) REFERENCES unidad_economica_ia(id)
+    FOREIGN KEY (UEIAid) REFERENCES unidades_economicas_ia(id)
 );
 
 CREATE TABLE activos_produccion_por_ia (
@@ -731,7 +665,7 @@ CREATE TABLE activos_produccion_por_ia (
     APIAid INT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (UEIAid) REFERENCES unidad_economica_ia(id),
+    FOREIGN KEY (UEIAid) REFERENCES unidades_economicas_ia(id),
     FOREIGN KEY (APIAid) REFERENCES activos_produccion_ia(id)
 );
 
@@ -749,7 +683,7 @@ CREATE TABLE fuentes_agua_ia (
     UEIAid INT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (UEIAid) REFERENCES unidad_economica_ia(id)
+    FOREIGN KEY (UEIAid) REFERENCES unidades_economicas_ia(id)
 );
 
 CREATE TABLE fuentes_agua_por_ia (
@@ -758,7 +692,7 @@ CREATE TABLE fuentes_agua_por_ia (
     FAIAid INT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (UEIAid) REFERENCES unidad_economica_ia(id),
+    FOREIGN KEY (UEIAid) REFERENCES unidades_economicas_ia(id),
     FOREIGN KEY (FAIAid) REFERENCES fuentes_agua_ia(id)
 );
 
@@ -780,7 +714,7 @@ CREATE TABLE administracion_trabajadores_ia (
     UEIAid INT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (UEIAid) REFERENCES unidad_economica_ia(id)
+    FOREIGN KEY (UEIAid) REFERENCES unidades_economicas_ia(id)
 );
 
 CREATE TABLE administracion_trabajadores_por_ia (
@@ -790,8 +724,10 @@ CREATE TABLE administracion_trabajadores_por_ia (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (ATIAid) REFERENCES administracion_trabajadores_ia(id),
-    FOREIGN KEY (UEIAid) REFERENCES unidad_economica_ia(id)
+    FOREIGN KEY (UEIAid) REFERENCES unidades_economicas_ia(id)
 );
+
+
 
 CREATE TABLE tipos_modalidad (
     id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
