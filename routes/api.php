@@ -17,6 +17,7 @@ use App\Http\Controllers\EspecieController;
 use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\PermisoPescaController;
 use App\Http\Controllers\UnidadEconomicaPAMoralController;
+use App\Http\Controllers\SocioDetallePAMoralController;
 
 //Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
     //return $request->user();
@@ -39,3 +40,4 @@ Route::apiResource('especies', EspecieController::class);
 Route::apiResource('productos', ProductoController::class);
 Route::apiResource('permisos_pesca', PermisoPescaController::class);
 Route::apiResource('unidades_economicas_pa_moral', UnidadEconomicaPAMoralController::class);
+Route::apiResource('socios_detalles_pa_moral', SocioDetallePAMoralController::class);
