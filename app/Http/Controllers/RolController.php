@@ -41,14 +41,8 @@ class RolController extends Controller
             $request->validate([
                 'NombreRol' => 'required|unique:roles|max:20',
             ], [
-                'NombreRol.unique' => 'El nombre para el Rol ya está en uso. Por favor, elige otro nombre.',
+                'NombreRol.unique' => 'El Rol con este nombre ya existe. Por favor, elige otro nombre.',
             ]);
-
-            // Verifica si el rol ya existe
-            $existeRol = Rol::where('NombreRol', $request->input('NombreRol'))->first();
-            if ($existeRol) {
-                return ApiResponse::error('El Rol ya existe', 422);
-            }
 
             // Verifica la cantidad de roles
             $totalRoles = Rol::count();
@@ -59,7 +53,7 @@ class RolController extends Controller
             $rol = Rol::create($request->all());
             return ApiResponse::success('Rol creado exitosamente', 201, $rol);
         } catch (ValidationException $e) {
-            return ApiResponse::error('Error de validación: ' . $e->getMessage(), 422, $e->errors());
+            return ApiResponse::error('Error de validación: ' . $e->getMessage(), 422,);
         }
     }
 
