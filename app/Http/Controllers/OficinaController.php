@@ -105,7 +105,7 @@ class OficinaController extends Controller
     public function update(Request $request, $id)
     {
         try {
-            $request->validate([
+            $data = $request->validate([
                 'NombreOficina' => 'required|string|max:50',
                 'Ubicacion' => 'required|string|max:100',
                 'Telefono' => 'required|string|max:10',
@@ -130,7 +130,8 @@ class OficinaController extends Controller
             }
 
             $oficina = Oficina::findOrFail($id);
-            $oficina->update($request->all());
+            $oficina->update($data);
+
             return ApiResponse::success('Oficina actualizada exitosamente', 200, $oficina);
         } catch (ModelNotFoundException $e) {
             return ApiResponse::error('Oficina no encontrada', 404);
