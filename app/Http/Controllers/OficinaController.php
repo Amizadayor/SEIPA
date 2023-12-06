@@ -62,20 +62,16 @@ class OficinaController extends Controller
                 if ($existeOficina->Email === $data['Email']) {
                     $errors['Email'] = 'El correo electrónico ya está registrado.';
                 }
-                return response()->json(['error' => 'La oficina ya existe', 'errors' => $errors], 422);
+                return ApiResponse::error('La oficina ya existe', 422, $errors);
             }
 
             // Crea la nueva oficina
             $oficina = Oficina::create($data);
-
-            // Devuelve respuesta JSON de éxito
-            return response()->json(['message' => 'Oficina creada exitosamente', 'data' => $oficina], 201);
+            return ApiResponse::success('Oficina creada exitosamente', 201, $oficina);
         } catch (ValidationException $e) {
-            // Manejar errores de validación
-            return response()->json(['error' => 'Error de validación', 'message' => $e->getMessage(), 'errors' => $e->errors()], 422);
+            return ApiResponse::error('Error de validación: ' . $e->getMessage(), 422);
         } catch (Exception $e) {
-            // Manejar otras excepciones
-            return response()->json(['error' => 'Error al crear la oficina', 'message' => $e->getMessage()], 500);
+            return ApiResponse::error('Error al crear la oficina: ' . $e->getMessage(), 500);
         }
     }
 
