@@ -33,6 +33,7 @@ class UnidadEconomicaPAMoral extends Model
         'IniOperaciones',
         'ActivoEmbMayor',
         'ActivoEmbMenor',
+        'CantidadPescadores',
         'ActvAcuacultura',
         'ActvPesca',
         'DocRepresentanteLegal',

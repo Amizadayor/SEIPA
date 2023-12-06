@@ -31,6 +31,7 @@ return new class extends Migration
             $table->boolean('ActvPesca')->default(false);
             $table->boolean('ActivoEmbMayor')->default(false);
             $table->boolean('ActivoEmbMenor')->default(false);
+            $table->integer('CantidadPescadores')->nullable();
             $table->string('DocRepresentanteLegal', 255)->nullable();
             $table->string('DocActaConstitutiva', 255)->nullable();
             $table->string('DocActaAsamblea', 255)->nullable();
