@@ -18,25 +18,35 @@ class PermisoController extends Controller
     {
         try {
             $permisos = Permiso::all();
-            return ApiResponse::success('Lista de los permisos', 200, $permisos);
+            $result = $permisos->map(function ($item) {
+                return [
+                    'id' => $item->id,
+                    'NombrePermiso' => $item->NombrePermiso,
+                    'created_at' => $item->created_at,
+                    'updated_at' => $item->updated_at,
+                ];
+            });
+            return ApiResponse::success('Lista de los permisos', 200, $result);
         } catch (Exception $e) {
             return ApiResponse::error('Error al obtener la lista de permisos: ' . $e->getMessage(), 500);
         }
     }
 
     /**
-     * función que crea un nuevo permisos para un rol.
+     * Función para crear un nuevo permiso.
      */
     public function store(Request $request)
     {
         try {
             $request->validate([
-                'NombrePermiso' => 'required|string|unique:permisos',
+                'NombrePermiso' => 'required|string|max:30|unique:permisos',
+            ], [
+                'NombrePermiso.unique' => 'El permiso con este nombre ya existe. Por favor, elige otro nombre.',
             ]);
             $permisos = Permiso::create($request->all());
             return ApiResponse::success('Permiso creado exitosamente', 201, $permisos);
         } catch (ValidationException $e) {
-            return ApiResponse::error('Error de validacion: ' . $e->getMessage(), 422);
+            return ApiResponse::error('Error de validacion: ' . $e->getMessage(), 422,);
         }
     }
 
@@ -47,6 +57,12 @@ class PermisoController extends Controller
     {
         try {
             $permisos = Permiso::findOrFail($id);
+            $result = [
+                'id' => $permisos->id,
+                'NombrePermiso' => $permisos->NombrePermiso,
+                'created_at' => $permisos->created_at,
+                'updated_at' => $permisos->updated_at,
+            ];
             return ApiResponse::success('Permiso obtenido exitosamente', 200, $permisos);
         } catch (ModelNotFoundException $e) {
             return ApiResponse::error('Permiso no encontrado', 404);
@@ -60,10 +76,14 @@ class PermisoController extends Controller
     {
         try {
             $request->validate([
-                'NombrePermiso' => 'required|string|unique:permisos',
+                'NombrePermiso' => 'required|string|max:30|unique:permisos,NombrePermiso,' . $id,
+            ], [
+                'NombrePermiso.unique' => 'El permiso con este nombre ya existe. Por favor, elige otro nombre.',
             ]);
+
             $permisos = Permiso::findOrFail($id);
             $permisos->update($request->all());
+
             return ApiResponse::success('Permiso actualizado exitosamente', 200, $permisos);
         } catch (ModelNotFoundException $e) {
             return ApiResponse::error('Permiso no encontrado', 404);
@@ -84,7 +104,7 @@ class PermisoController extends Controller
         } catch (ModelNotFoundException $e) {
             return ApiResponse::error('Permiso no encontrado', 404);
         } catch (Exception $e) {
-            return ApiResponse::error('Error: ' . $e->getMessage(), 422);
+            return ApiResponse::error('Error de validación: ' . $e->getMessage(), 422);
         }
     }
 }
