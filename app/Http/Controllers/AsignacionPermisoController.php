@@ -25,7 +25,7 @@ class AsignacionPermisoController extends Controller
                     'id' => $item->id,
                     'Rolid' => $item->rol->NombreRol,
                     'Permid' => $item->permiso->NombrePermiso,
-                    'Permitido' => $item->Permitido,
+                    'Permitido' => $item->Permitido ? 'Si' : 'No',
                     'created_at' => $item->created_at,
                     'updated_at' => $item->updated_at,
                 ];
@@ -42,23 +42,28 @@ class AsignacionPermisoController extends Controller
     public function store(Request $request)
     {
         try {
-            $request->validate([
+            $data = $request->validate([
                 'Rolid' => 'required|exists:roles,id',
                 'Permid' => 'required|exists:permisos,id',
                 'Permitido' => 'required|boolean'
             ]);
 
-            $existepermiso = AsignacionPermiso::where('Rolid', $request->Rolid)
-                ->where('Permid', $request->Privid)
+            // Verifica la existencia de la asignación de permisos
+            $existepermiso = AsignacionPermiso::where('Rolid', $data['Rolid'])
+                ->where('Permid', $data['Permid'])
                 ->first();
+
             if ($existepermiso) {
                 return ApiResponse::error('El permiso ya está asignado a este rol', 422);
             }
 
-            $asignacionpermiso = AsignacionPermiso::create($request->all());
+            // Crea la nueva asignación de permisos
+            $asignacionpermiso = AsignacionPermiso::create($data);
             return ApiResponse::success('Permiso asignado creado exitosamente', 201, $asignacionpermiso);
         } catch (ValidationException $e) {
-            return ApiResponse::error('Error de validación: ' . $e->getMessage(), 422);
+            return ApiResponse::error('Error de validación: ' . $e->getMessage(), 422, $e->errors());
+        } catch (Exception $e) {
+            return ApiResponse::error('Error al crear la asignación de permiso: ' . $e->getMessage(), 500);
         }
     }
 
@@ -80,7 +85,7 @@ class AsignacionPermisoController extends Controller
             return ApiResponse::success('Permiso asignado a un rol obtenido exitosamente', 200, $result);
         } catch (ModelNotFoundException $e) {
             return ApiResponse::error('Permiso asignado a un rol no encontrado', 404);
-        }   catch (Exception $e) {
+        } catch (Exception $e) {
             return ApiResponse::error('Error al obtener el permiso asignado a un rol: ' . $e->getMessage(), 500);
         }
     }
@@ -91,26 +96,32 @@ class AsignacionPermisoController extends Controller
     public function update(Request $request, $id)
     {
         try {
-            $asignacionpermiso = AsignacionPermiso::findOrFail($id);
-            $request->validate([
-                'Rolid' => 'required|integer',
-                'Permid' => 'required|integer',
+            $data = $request->validate([
+                'Rolid' => 'required|exists:roles,id',
+                'Permid' => 'required|exists:permisos,id',
                 'Permitido' => 'required|boolean'
             ]);
 
-            $existepermiso = AsignacionPermiso::where('Rolid', $request->Rolid)
-                ->where('Permid', $request->Privid)
+            // Verifica la existencia de la asignación de permisos excluyendo el registro actual
+            $existepermiso = AsignacionPermiso::where('Rolid', $data['Rolid'])
+                ->where('Permid', $data['Permid'])
+                ->where('id', '!=', $id)
                 ->first();
+
             if ($existepermiso) {
                 return ApiResponse::error('El permiso ya está asignado a este rol', 422);
             }
 
-            $asignacionpermiso->update($request->all());
+            $asignacionpermiso = AsignacionPermiso::findOrFail($id);
+            $asignacionpermiso->update($data);
+
             return ApiResponse::success('Permiso asignado actualizado exitosamente', 200, $asignacionpermiso);
+        } catch (ValidationException $e) {
+            return ApiResponse::error('Error de validación: ' . $e->getMessage(), 422, $e->errors());
         } catch (ModelNotFoundException $e) {
-            return ApiResponse::error('Permiso asignado no encontrado', 404);
+            return ApiResponse::error('Asignación de permiso no encontrada', 404);
         } catch (Exception $e) {
-            return ApiResponse::error('Error al actualizar el permiso: ' . $e->getMessage(), 422);
+            return ApiResponse::error('Error al actualizar la asignación de permiso: ' . $e->getMessage(), 500);
         }
     }
 
@@ -124,8 +135,8 @@ class AsignacionPermisoController extends Controller
             $asignacionpermiso->delete();
             return ApiResponse::success('Permiso asignado eliminado exitosamente', 200);
         } catch (ModelNotFoundException $e) {
-            return ApiResponse::error('Permiso asignado no encontrado',404);
-        }   catch (Exception $e) {
+            return ApiResponse::error('Permiso asignado no encontrado', 404);
+        } catch (Exception $e) {
             return ApiResponse::error('Error al eliminar el permiso asignado: ' . $e->getMessage(), 500);
         }
     }
