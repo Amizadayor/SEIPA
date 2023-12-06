@@ -41,28 +41,41 @@ class OficinaController extends Controller
     public function store(Request $request)
     {
         try {
-            $request->validate([
+            $data = $request->validate([
                 'NombreOficina' => 'required|string|max:50',
                 'Ubicacion' => 'required|string|max:100',
                 'Telefono' => 'required|string|max:10',
                 'Email' => 'required|string|max:40'
             ]);
 
-            $existeOficina = Oficina::where('NombreOficina', $request->NombreOficina)
-                ->where('Ubicacion', $request->Ubicacion)
-                ->where('Telefono', $request->Telefono)
-                ->where('Email', $request->Email)
-                ->first();
+            // Verifica la existencia de la oficina
+            $existeOficina = Oficina::where(function ($query) use ($data) {
+                $query->where('Telefono', $data['Telefono'])
+                    ->orWhere('Email', $data['Email']);
+            })->first();
+
             if ($existeOficina) {
-                return ApiResponse::error('La oficina ya existe', 422);
+                $errors = [];
+                if ($existeOficina->Telefono === $data['Telefono']) {
+                    $errors['Telefono'] = 'El número de teléfono ya está registrado.';
+                }
+                if ($existeOficina->Email === $data['Email']) {
+                    $errors['Email'] = 'El correo electrónico ya está registrado.';
+                }
+                return response()->json(['error' => 'La oficina ya existe', 'errors' => $errors], 422);
             }
 
-            $oficina = Oficina::create($request->all());
-            return ApiResponse::success('Oficina creada exitosamente', 201, $oficina);
+            // Crea la nueva oficina
+            $oficina = Oficina::create($data);
+
+            // Devuelve respuesta JSON de éxito
+            return response()->json(['message' => 'Oficina creada exitosamente', 'data' => $oficina], 201);
         } catch (ValidationException $e) {
-            return ApiResponse::error('Error de validación: ' . $e->getMessage(), 422, $e->errors());
+            // Manejar errores de validación
+            return response()->json(['error' => 'Error de validación', 'message' => $e->getMessage(), 'errors' => $e->errors()], 422);
         } catch (Exception $e) {
-            return ApiResponse::error('Error al crear la oficina: ' . $e->getMessage(), 500);
+            // Manejar otras excepciones
+            return response()->json(['error' => 'Error al crear la oficina', 'message' => $e->getMessage()], 500);
         }
     }
 
@@ -103,13 +116,21 @@ class OficinaController extends Controller
                 'Email' => 'required|string|max:40'
             ]);
 
-            $existeOficina = Oficina::where('NombreOficina', $request->NombreOficina)
-                ->where('Ubicacion', $request->Ubicacion)
-                ->where('Telefono', $request->Telefono)
-                ->where('Email', $request->Email)
-                ->first();
+            // Verificar la existencia de la oficina
+            $existeOficina = Oficina::where(function ($query) use ($request, $id) {
+                $query->where('Telefono', $request->Telefono)
+                    ->orWhere('Email', $request->Email);
+            })->where('id', '!=', $id)->first();
+
             if ($existeOficina) {
-                return ApiResponse::error('La oficina ya existe', 422);
+                $errors = [];
+                if ($existeOficina->Telefono === $request->Telefono) {
+                    $errors['Telefono'] = 'El número de teléfono ya está registrado.';
+                }
+                if ($existeOficina->Email === $request->Email) {
+                    $errors['Email'] = 'El correo electrónico ya está registrado.';
+                }
+                return ApiResponse::error('La oficina ya existe', 422, $errors);
             }
 
             $oficina = Oficina::findOrFail($id);
