@@ -48,7 +48,7 @@ class DistritoController extends Controller
             // Verifica la existencia del distrito
             $existeDistrito = Distrito::where($data)->exists();
             if ($existeDistrito) {
-                return ApiResponse::error('El distrito ya existe.', 422);
+                return ApiResponse::error('El distrito ya existe en esta región.', 422);
             }
 
             $distrito = Distrito::create($data);
@@ -96,7 +96,7 @@ class DistritoController extends Controller
             // Verifica la existencia del distrito
             $existeDistrito = Distrito::where($data)->exists();
             if ($existeDistrito) {
-                return ApiResponse::error('El distrito ya existe.', 422);
+                return ApiResponse::error('El distrito ya existe en esta región.', 422);
             }
 
             $distrito = Distrito::findOrFail($id);
