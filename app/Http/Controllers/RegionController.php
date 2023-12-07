@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Exception;
 use App\Models\Region;
 use App\Http\Responses\ApiResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Exception;
 
 class RegionController extends Controller
 {
@@ -18,7 +18,15 @@ class RegionController extends Controller
     {
         try {
             $regiones = Region::all();
-            return ApiResponse::success('Lista de regiones', 200, $regiones);
+            $result = $regiones->map(function ($item) {
+                return [
+                    'id' => $item->id,
+                    'NombreRegion' => $item->NombreRegion,
+                    'created_at' => $item->created_at,
+                    'updated_at' => $item->updated_at,
+                ];
+            });
+            return ApiResponse::success('Lista de regiones', 200, $result);
         } catch (Exception $e) {
             return ApiResponse::error('Error al obtener la lista de regiones: ' . $e->getMessage(), 500);
         }
@@ -30,19 +38,24 @@ class RegionController extends Controller
     public function store(Request $request)
     {
         try {
-            $request->validate([
-                'NombreRegion' => 'required|unique:regiones',
+            $data = $request->validate([
+                'NombreRegion' => 'required|string|max:40|unique:regiones',
+            ], [
+                'NombreRegion.unique' => 'La Región con este nombre ya existe. Por favor, elige otro nombre.',
             ]);
 
+            // Verifica la cantidad de regiones
             $totalRegiones = Region::count();
             if ($totalRegiones >= 8) {
                 return ApiResponse::error('No puedes crear más de 8 regiones', 422);
             }
 
-            $region = Region::create($request->all());
+            $region = Region::create($data);
             return ApiResponse::success('Región creada exitosamente', 201, $region);
         } catch (ValidationException $e) {
             return ApiResponse::error('Error de validación: ' . $e->getMessage(), 422);
+        } catch (Exception $e) {
+            return ApiResponse::error('Error: ' . $e->getMessage(), 500);
         }
     }
 
@@ -65,20 +78,20 @@ class RegionController extends Controller
     public function update(Request $request, $id)
     {
         try {
-            $request->validate([
-                'NombreRegion' => 'required|unique:regiones,NombreRegion,' . $id,
+            $data = $request->validate([
+                'NombreRegion' => 'required|string|max:40|unique:regiones',
+            ], [
+                'NombreRegion.unique' => 'La Región con este nombre ya existe. Por favor, elige otro nombre.',
             ]);
 
             $region = Region::findOrFail($id);
-            $region->update($request->all());
+            $region->update($data);
 
             return ApiResponse::success('Región actualizada exitosamente', 200, $region);
         } catch (ModelNotFoundException $e) {
             return ApiResponse::error('Región no encontrada', 404);
-        } catch (ValidationException $e) {
-            return ApiResponse::error('La Región ya existe: ' . $e->getMessage(), 422);
         } catch (Exception $e) {
-            return ApiResponse::error('Error: ' . $e->getMessage(), 500);
+            return ApiResponse::error('Error de validación : ' . $e->getMessage(), 500);
         }
     }
 
