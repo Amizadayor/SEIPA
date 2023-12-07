@@ -13,7 +13,7 @@ use Exception;
 class DistritoController extends Controller
 {
     /**
-     * Función que obtener todos los distritos.
+     * Función que obtener la lista de todos los Distritos.
      */
     public function index()
     {
@@ -40,19 +40,18 @@ class DistritoController extends Controller
     public function store(Request $request)
     {
         try {
-            $request->validate([
+            $data = $request->validate([
                 'NombreDistrito' => 'required|string|max:40',
                 'Regid' => 'required|exists:regiones,id'
             ]);
 
-            $existeRegion = Distrito::where('NombreDistrito', $request->NombreDistrito)
-                ->where('Regid', $request->Regid)
-                ->first();
-            if ($existeRegion) {
-                return ApiResponse::error('El distrito ya existe en esta región', 422);
+            // Verifica la existencia del distrito
+            $existeDistrito = Distrito::where($data)->exists();
+            if ($existeDistrito) {
+                return ApiResponse::error('El distrito ya existe.', 422);
             }
 
-            $distrito = Distrito::create($request->all());
+            $distrito = Distrito::create($data);
             return ApiResponse::success('Distrito creado exitosamente', 201, $distrito);
         } catch (ValidationException $e) {
             return ApiResponse::error('Error de validación: ' . $e->getMessage(), 422, $e->errors());
@@ -89,20 +88,19 @@ class DistritoController extends Controller
     public function update(Request $request, $id)
     {
         try {
-            $distrito = Distrito::findOrFail($id);
-            $request->validate([
+            $data = $request->validate([
                 'NombreDistrito' => 'required|string|max:40',
                 'Regid' => 'required|exists:regiones,id'
             ]);
 
-            $existeDistrito = Distrito::where('NombreDistrito', $request->NombreDistrito)
-                ->where('Regid', $request->Regid)
-                ->first();
+            // Verifica la existencia del distrito
+            $existeDistrito = Distrito::where($data)->exists();
             if ($existeDistrito) {
-                return ApiResponse::error('El distrito ya existe en esta región', 422);
+                return ApiResponse::error('El distrito ya existe.', 422);
             }
 
-            $distrito->update($request->all());
+            $distrito = Distrito::findOrFail($id);
+            $distrito->update($data);
             return ApiResponse::success('Distrito actualizado exitosamente', 200, $distrito);
         } catch (ModelNotFoundException $e) {
             return ApiResponse::error('Distrito no encontrado', 404);
