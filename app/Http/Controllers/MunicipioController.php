@@ -41,14 +41,12 @@ class MunicipioController extends Controller
     public function store(Request $request)
     {
         try {
-            $request->validate([
+            $data = $request->validate([
                 'NombreMunicipio' => 'required|string|max:40',
                 'Disid' => 'required|exists:distritos,id'
             ]);
 
-            $existeMunicipio = Municipio::where('NombreMunicipio', $request->NombreMunicipio)
-                ->where('Disid', $request->Disid)
-                ->first();
+            $existeMunicipio = Municipio::where($data)->exists();
             if ($existeMunicipio) {
                 return ApiResponse::error('El municipio ya existe en este distrito', 422);
             }
@@ -91,20 +89,18 @@ class MunicipioController extends Controller
     public function update(Request $request, $id)
     {
         try {
-            $municipio = Municipio::findOrFail($id);
-            $request->validate([
+            $data = $request->validate([
                 'NombreMunicipio' => 'required|string|max:40',
                 'Disid' => 'required|exists:distritos,id'
             ]);
 
-            $existeMunicipio = Municipio::where('NombreMunicipio', $request->NombreMunicipio)
-                ->where('Disid', $request->Disid)
-                ->first();
+            $existeMunicipio = Municipio::where($data)->exists();
             if ($existeMunicipio) {
                 return ApiResponse::error('El municipio ya existe en este distrito', 422);
             }
 
-            $municipio->update($request->all());
+            $municipio = Municipio::findOrFail($id);
+            $municipio->update($data);
             return ApiResponse::success('Municipio actualizado exitosamente', 200, $municipio);
         } catch (ModelNotFoundException $e) {
             return ApiResponse::error('Municipio no encontrado', 404);
