@@ -42,19 +42,18 @@ class LocalidadController extends Controller
     public function store(Request $request)
     {
         try {
-            $request->validate([
-                'NombreLocalidad' => 'required|string|max:30',
+            $data = $request->validate([
+                'NombreLocalidad' => 'required|string|max:50',
                 'Munid' => 'required|exists:municipios,id'
             ]);
 
-            $existeLocalidad = Localidad::where('NombreLocalidad', $request->NombreLocalidad)
-                ->where('Munid', $request->Munid)
-                ->first();
+            // Verifica la existencia de la localidad
+            $existeLocalidad = Localidad::where($data)->exists();
             if ($existeLocalidad) {
-                return ApiResponse::error('La localidad ya existe en este municipio', 422);
+                return ApiResponse::error('La Localidad ya existe en este municipio', 422);
             }
 
-            $localidad = Localidad::create($request->all());
+            $localidad = Localidad::create($data);
             return ApiResponse::success('Localidad creada exitosamente', 201, $localidad);
         } catch (ValidationException $e) {
             return ApiResponse::error('Error de validación: ' . $e->getMessage(), 422, $e->errors());
@@ -93,20 +92,19 @@ class LocalidadController extends Controller
     public function update(Request $request, $id)
     {
         try {
-            $request->validate([
+            $data = $request->validate([
                 'NombreLocalidad' => 'required|string|max:30',
                 'Munid' => 'required|exists:municipios,id'
             ]);
 
-            $existeLocalidad = Localidad::where('NombreLocalidad', $request->NombreLocalidad)
-                ->where('Munid', $request->Munid)
-                ->first();
+            // Verifica la existencia de la localidad
+            $existeLocalidad = Localidad::where($data)->exists();
             if ($existeLocalidad) {
-                return ApiResponse::error('La localidad ya existe en este municipio', 422);
+                return ApiResponse::error('La Localidad ya existe en este municipio', 422);
             }
 
             $localidad = Localidad::findOrFail($id);
-            $localidad->update($request->all());
+            $localidad->update($data);
             return ApiResponse::success('Localidad actualizada exitosamente', 200, $localidad);
         } catch (ModelNotFoundException $e) {
             return ApiResponse::error('Localidad no encontrada', 404);
