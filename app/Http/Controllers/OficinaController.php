@@ -48,9 +48,10 @@ class OficinaController extends Controller
                 'Email' => 'required|string|max:40'
             ]);
 
-            // Verifica la existencia de la oficina
+            // Verifica la existencia de la oficina por su nombre, teléfono o correo electrónico
             $existeOficina = Oficina::where(function ($query) use ($data) {
-                $query->where('Telefono', $data['Telefono'])
+                $query->where('NombreOficina', $data['NombreOficina'])
+                    ->orWhere('Telefono', $data['Telefono'])
                     ->orWhere('Email', $data['Email']);
             })->first();
 
@@ -112,10 +113,11 @@ class OficinaController extends Controller
                 'Email' => 'required|string|max:40'
             ]);
 
-            // Verificar la existencia de la oficina
-            $existeOficina = Oficina::where(function ($query) use ($request, $id) {
-                $query->where('Telefono', $request->Telefono)
-                    ->orWhere('Email', $request->Email);
+            // Verificar la existencia de la oficina por su nombre, teléfono o correo electrónico, excluyendo la oficina actual
+            $existeOficina = Oficina::where(function ($query) use ($data, $id) {
+                $query->where('NombreOficina', $data['NombreOficina'])
+                    ->orWhere('Telefono', $data['Telefono'])
+                    ->orWhere('Email', $data['Email']);
             })->where('id', '!=', $id)->first();
 
             if ($existeOficina) {
