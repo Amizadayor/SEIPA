@@ -23,7 +23,7 @@ class UnidadEconomicaPAFisicoController extends Controller
             $result = $UEPAF->map(function ($item) {
                 return [
                     'id' => $item->id,
-                    'Oficina' => $item->oficina->NombreOficina,
+                    'Ofcid' => $item->oficina->NombreOficina,
                     'FechaRegistro' => $item->FechaRegistro,
                     'RNPA' => $item->RNPA,
                     'CURP' => $item->CURP,
@@ -39,7 +39,7 @@ class UnidadEconomicaPAFisicoController extends Controller
                     'NmExterior' => $item->NmExterior,
                     'NmInterior' => $item->NmInterior,
                     'CodigoPostal' => $item->CodigoPostal,
-                    'Localidad' => $item->localidad->NombreLocalidad,
+                    'Locid' => $item->localidad->NombreLocalidad,
                     'Municipio' => $item->localidad->municipio->NombreMunicipio,
                     'Distrito' => $item->localidad->municipio->distrito->NombreDistrito,
                     'Región' => $item->localidad->municipio->distrito->region->NombreRegion,
@@ -73,7 +73,7 @@ class UnidadEconomicaPAFisicoController extends Controller
     public function store(Request $request)
     {
         try {
-            $request->validate([
+            $data = $request->validate([
                 'Ofcid' => 'required|exists:oficinas,id',
                 'FechaRegistro' => 'required|date',
                 'RNPA' => 'required|string|max:50',
@@ -107,15 +107,19 @@ class UnidadEconomicaPAFisicoController extends Controller
                 'DocRFC' => 'required|string|max:255'
             ]);
 
-            $existeUEPAF = UnidadEconomicaPAFisico::where('Ofcid', $request->Ofcid)
-                ->where('FechaRegistro', $request->FechaRegistro)
-                ->where('RNPA', $request->RNPA)
-                ->first();
-            if ($existeUEPAF) {
-                return ApiResponse::error('La unidad economica ya existe en esta oficina', 422);
-            }
+            // Verifica la existencia de la unidad economica por su CURP,
+            // FALTA LA VALIDACIÓN PARA CREAR 2 UNIDADES ECONOMICAS CON LA MISMA CURP, PERO LA ACTIVIDAD PESCA Y ACUACULTURA DEBE SER DIFERENTE
 
-            $UEPAF = UnidadEconomicaPAFisico::create($request->all());
+        /*  $existeUEPAF = UnidadEconomicaPAFisico::where('CURP', $data['CURP'])->first();
+            if ($existeUEPAF) {
+                $errors = [];
+                if ($existeUEPAF->CURP === $data['CURP']) {
+                    $errors['CURP'] = 'El CURP ya está registrado en una Unidad Economica.';
+                }
+                return ApiResponse::error('La Unidad Economica ya existe', 422, $errors);
+            } */
+
+            $UEPAF = UnidadEconomicaPAFisico::create($data);
             return ApiResponse::success('Unidad economica creada exitosamente', 201, $UEPAF);
         } catch (ValidationException $e) {
             return ApiResponse::error('Error de validación: ' . $e->getMessage(), 422, $e->errors());
