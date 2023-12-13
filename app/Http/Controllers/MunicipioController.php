@@ -51,7 +51,7 @@ class MunicipioController extends Controller
                 return ApiResponse::error('El municipio ya existe en este distrito', 422);
             }
 
-            $municipio = Municipio::create($request->all());
+            $municipio = Municipio::create($data);
             return ApiResponse::success('Municipio creado exitosamente', 201, $municipio);
         } catch (ValidationException $e) {
             return ApiResponse::error('Error de validación: ' . $e->getMessage(), 422, $e->errors());
