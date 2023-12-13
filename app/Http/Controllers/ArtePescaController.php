@@ -38,17 +38,16 @@ class ArtePescaController extends Controller
     public function store(Request $request)
     {
         try {
-            $request->validate([
+            $data = $request->validate([
                 'NombreArtePesca' => 'required|string|max:50'
             ]);
 
-            $existeArtePesca = ArtePesca::where('NombreArtePesca', $request->NombreArtePesca)
-                ->first();
+            $existeArtePesca = ArtePesca::where($data)->exists();
             if ($existeArtePesca) {
                 return ApiResponse::error('El arte de pesca ya existe', 422);
             }
 
-            $artePesca = ArtePesca::create($request->all());
+            $artePesca = ArtePesca::create($data);
             return ApiResponse::success('Arte de pesca creado exitosamente', 201, $artePesca);
         } catch (ValidationException $e) {
             return ApiResponse::error('Error de validación: ' . $e->getMessage(), 422, $e->errors());
@@ -84,19 +83,18 @@ class ArtePescaController extends Controller
     public function update(Request $request, $id)
     {
         try {
-            $artePesca = ArtePesca::findOrFail($id);
-            $request->validate([
+
+            $data = $request->validate([
                 'NombreArtePesca' => 'required|string|max:50'
             ]);
 
-            $existeArtePesca = ArtePesca::where('NombreArtePesca', $request->NombreArtePesca)
-                ->where('id', '!=', $artePesca->id)
-                ->first();
+            $existeArtePesca = ArtePesca::where($data)->exists();
             if ($existeArtePesca) {
                 return ApiResponse::error('El arte de pesca ya existe', 422);
             }
 
-            $artePesca->update($request->all());
+            $artePesca = ArtePesca::findOrFail($id);
+            $artePesca->update($data);
             return ApiResponse::success('Arte de pesca actualizado exitosamente', 200, $artePesca);
         } catch (ModelNotFoundException $e) {
             return ApiResponse::error('Arte de pesca no encontrado', 404);
