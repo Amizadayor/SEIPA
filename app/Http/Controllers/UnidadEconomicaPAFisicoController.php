@@ -110,14 +110,14 @@ class UnidadEconomicaPAFisicoController extends Controller
             // Verifica la existencia de la unidad economica por su CURP,
             // FALTA LA VALIDACIÓN PARA CREAR 2 UNIDADES ECONOMICAS CON LA MISMA CURP, PERO LA ACTIVIDAD PESCA Y ACUACULTURA DEBE SER DIFERENTE
 
-        /*  $existeUEPAF = UnidadEconomicaPAFisico::where('CURP', $data['CURP'])->first();
+            $existeUEPAF = UnidadEconomicaPAFisico::where('CURP', $data['CURP'])->first();
             if ($existeUEPAF) {
                 $errors = [];
                 if ($existeUEPAF->CURP === $data['CURP']) {
                     $errors['CURP'] = 'El CURP ya está registrado en una Unidad Economica.';
                 }
                 return ApiResponse::error('La Unidad Economica ya existe', 422, $errors);
-            } */
+            }
 
             $UEPAF = UnidadEconomicaPAFisico::create($data);
             return ApiResponse::success('Unidad economica creada exitosamente', 201, $UEPAF);
