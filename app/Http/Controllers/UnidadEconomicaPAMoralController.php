@@ -67,7 +67,7 @@ class UnidadEconomicaPAMoralController extends Controller
     public function store(Request $request)
     {
         try {
-            $request->validate([
+            $data = $request->validate([
                 'UEDuenoid' => 'required|integer',
                 //'Ofcid' => 'required|exists:oficinas,id',
                 'Ofcid' => 'required',
@@ -97,13 +97,26 @@ class UnidadEconomicaPAMoralController extends Controller
                 'DocActaAsamblea' => 'nullable|string|max:255'
             ]);
 
-            $existeUEPAM = UnidadEconomicaPAMoral::where('RNPA', $request->RNPA)
-                ->first();
+            $existeUEPAM = UnidadEconomicaPAMoral::where('RFC', $data['RFC'])
+            ->orWhere('Email', $data['Email'])
+            ->orWhere('RazonSocial', $data['RazonSocial'])
+            ->first();
+
             if ($existeUEPAM) {
-                return ApiResponse::error('La unidad economica ya existe en esta oficina', 422);
+                $errors = [];
+                if ($existeUEPAM->RFC === $data['RFC']) {
+                    $errors['RFC'] = 'El RFC de la organización ya está registrado en una Unidad Economica.';
+                }
+                if ($existeUEPAM->RazonSocial === $data['RazonSocial']) {
+                    $errors['RazonSocial'] = 'El Nombre de la organización ya está registrado en una Unidad Economica.';
+                }
+                if ($existeUEPAM->Email === $data['Email']) {
+                    $errors['Email'] = 'El Email de la organización ya está registrado en una Unidad Economica.';
+                }
+                return ApiResponse::error('La Unidad Economica ya existe', 422, $errors);
             }
 
-        $UEPAM = UnidadEconomicaPAMoral::create($request->all());
+        $UEPAM = UnidadEconomicaPAMoral::create($data);
         return ApiResponse::success('Unidad economica creada exitosamente', 201, $UEPAM);
     } catch (ValidationException $e) {
         return ApiResponse::error('Error de validación: ' . $e->getMessage(), 422, $e->errors());
@@ -166,7 +179,7 @@ class UnidadEconomicaPAMoralController extends Controller
     public function update(Request $request, $id)
     {
         try {
-            $request->validate([
+            $data = $request->validate([
                 'UEDuenoid' => 'required|integer',
                 //'Ofcid' => 'required|exists:oficinas,id',
                 'Ofcid' => 'required',
@@ -196,17 +209,27 @@ class UnidadEconomicaPAMoralController extends Controller
                 'DocActaAsamblea' => 'nullable|string|max:255'
             ]);
 
-            $existeUEPAM = UnidadEconomicaPAMoral::where('RNPA', $request->RNPA)
-            ->where('FechaRegistro', $request->FechaRegistro)
-            ->where('Ofcid', $request->Ofcid)
-            ->where('id', '!=', $id)
+            $existeUEPAM = UnidadEconomicaPAMoral::where('RFC', $data['RFC'])
+            ->orWhere('RazonSocial', $data['RazonSocial'])
+            ->orWhere('Email', $data['Email'])
             ->first();
-        if ($existeUEPAM) {
-            return ApiResponse::error('La unidad economica ya existe en esta oficina', 422);
-        }
+
+            if ($existeUEPAM) {
+                $errors = [];
+                if ($existeUEPAM->RFC === $data['RFC']) {
+                    $errors['RFC'] = 'El RFC de la organización ya está registrado en una Unidad Economica.';
+                }
+                if ($existeUEPAM->RazonSocial === $data['RazonSocial']) {
+                    $errors['RazonSocial'] = 'El Nombre de la organización ya está registrado en una Unidad Economica.';
+                }
+                if ($existeUEPAM->Email === $data['Email']) {
+                    $errors['Email'] = 'El Email de la organización ya está registrado en una Unidad Economica.';
+                }
+                return ApiResponse::error('La Unidad Economica ya existe', 422, $errors);
+            }
 
         $UEPAM = UnidadEconomicaPAMoral::findOrFail($id);
-        $UEPAM->update($request->all());
+        $UEPAM->update($data);
         return ApiResponse::success('Unidad Económica actualizada exitosamente', 200, $UEPAM);
     } catch (ModelNotFoundException $e) {
         return ApiResponse::error('Unidad Económica no encontrada', 404);
