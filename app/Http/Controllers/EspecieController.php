@@ -38,17 +38,22 @@ class EspecieController extends Controller
     public function store(Request $request)
     {
         try {
-            $request->validate([
+            $data = $request->validate([
                 'NombreEspecie' => 'required|string|max:50',
             ]);
 
-            $existeEspecie = Especie::where('NombreEspecie', $request->NombreEspecie)
-                ->first();
+            $existeEspecie = Especie::where($data)->exists();
             if ($existeEspecie) {
                 return ApiResponse::error('La especie ya existe', 422);
             }
 
-            $especie = Especie::create($request->all());
+        /* $existeEspecie = Especie::where('NombreEspecie', $request->NombreEspecie)
+                ->first();
+            if ($existeEspecie) {
+                return ApiResponse::error('La especie ya existe', 422);
+            } */
+
+            $especie = Especie::create($data);
             return ApiResponse::success('Especie creada exitosamente', 201, $especie);
         } catch (ValidationException $e) {
             return ApiResponse::error('Error de validación: ' . $e->getMessage(), 422, $e->errors());
@@ -82,18 +87,23 @@ class EspecieController extends Controller
     public function update(Request $request, $id)
     {
         try {
-            $request->validate([
+            $data = $request->validate([
                 'NombreEspecie' => 'required|string|max:50',
             ]);
 
-            $existeEspecie = Especie::where('NombreEspecie', $request->NombreEspecie)
-                ->first();
+            $existeEspecie = Especie::where($data)->exists();
             if ($existeEspecie) {
                 return ApiResponse::error('La especie ya existe', 422);
             }
 
+            /* $existeEspecie = Especie::where('NombreEspecie', $request->NombreEspecie)
+                ->first();
+            if ($existeEspecie) {
+                return ApiResponse::error('La especie ya existe', 422);
+            } */
+
             $especie = Especie::findOrFail($id);
-            $especie->update($request->all());
+            $especie->update($data);
             return ApiResponse::success('Especie actualizada exitosamente', 200, $especie);
         } catch (ModelNotFoundException $e) {
             return ApiResponse::error('Especie no encontrada', 404);
