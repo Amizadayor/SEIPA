@@ -37,19 +37,24 @@ class PermisoPescaController extends Controller
     public function store(Request $request)
     {
         try {
-            $request->validate([
+            $data = $request->validate([
                 'NombrePermiso' => 'required|string|max:50',
                 'TPEspecieid' => 'required|integer'
             ]);
 
-            $existepermisopesca = PermisoPesca::where('NombrePermiso', $request->NombrePermiso)
+            /* $existepermisopesca = PermisoPesca::where('NombrePermiso', $request->NombrePermiso)
                 ->where('TPEspecieid', $request->TPEspecieid)
                 ->first();
             if ($existepermisopesca) {
                 return ApiResponse::error('Ya existe un permiso de pesca con el mismo nombre y especie', 409);
+            } */
+
+            $existepermisopesca = PermisoPesca::where($data)->exists();
+            if ($existepermisopesca) {
+                return ApiResponse::error('Ya existe un permiso de pesca con el mismo nombre y especie', 409);
             }
 
-            $permisopesca = PermisoPesca::create($request->all());
+            $permisopesca = PermisoPesca::create($data);
             return ApiResponse::success('Permiso de pesca creado', 201, $permisopesca);
         } catch (ValidationException $e) {
             return ApiResponse::error('Error de validación: ' . $e->getMessage(), 422, $e->errors());
@@ -84,14 +89,19 @@ class PermisoPescaController extends Controller
     public function update(Request $request, $id)
     {
         try {
-            $request->validate([
+            $data = $request->validate([
                 'NombrePermiso' => 'required|string|max:50',
                 'TPEspecieid' => 'required|integer'
             ]);
 
-            $existepermisopesca = PermisoPesca::where('NombrePermiso', $request->NombrePermiso)
+            /* $existepermisopesca = PermisoPesca::where('NombrePermiso', $request->NombrePermiso)
                 ->where('TPEspecieid', $request->TPEspecieid)
                 ->first();
+            if ($existepermisopesca) {
+                return ApiResponse::error('Ya existe un permiso de pesca con el mismo nombre y especie', 409);
+            } */
+
+            $existepermisopesca = PermisoPesca::where($data)->exists();
             if ($existepermisopesca) {
                 return ApiResponse::error('Ya existe un permiso de pesca con el mismo nombre y especie', 409);
             }
