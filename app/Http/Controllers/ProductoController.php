@@ -23,7 +23,7 @@ class ProductoController extends Controller
                     'id' => $item->id,
                     'NombreComun' => $item->NombreComun,
                     'NombreCientifico' => $item->NombreCientifico,
-                    'TPEspecieid' => $item->TPEspecieid,
+                    'TPEspecieid' => $item->especie->NombreEspecie,
                     'created_at' => $item->created_at,
                     'updated_at' => $item->updated_at,
                 ];
@@ -40,21 +40,29 @@ class ProductoController extends Controller
     public function store(Request $request)
     {
         try {
-            $request->validate([
+            $data = $request->validate([
                 'NombreComun' => 'required|string|max:50',
                 'NombreCientifico' => 'required|string|max:50',
                 'TPEspecieid' => 'required|integer',
             ]);
 
-            $existeProducto = Producto::where('NombreComun', $request->NombreComun)
-                ->where('NombreCientifico', $request->NombreCientifico)
-                ->where('TPEspecieid', $request->TPEspecieid)
+            // Verifica la existencia del producto por su nombre común o científico
+            $existeProducto = Producto::where('NombreComun', $data['NombreComun'])
+                ->orWhere('NombreCientifico', $data['NombreCientifico'])
                 ->first();
+
             if ($existeProducto) {
-                return ApiResponse::error('El producto ya existe', 422);
+                $errors = [];
+                if ($existeProducto->NombreComun === $data['NombreComun']) {
+                    $errors['NombreComun'] = ['El nombre común ya existe'];
+                }
+                if ($existeProducto->NombreCientifico === $data['NombreCientifico']) {
+                    $errors['NombreCientifico'] = ['El nombre científico ya existe'];
+                }
+                return ApiResponse::error('El producto ya existe', 422, $errors);
             }
 
-            $producto = Producto::create($request->all());
+            $producto = Producto::create($data);
             return ApiResponse::success('Producto creado exitosamente', 201, $producto);
         } catch (ValidationException $e) {
             return ApiResponse::error('Error de validación: ' . $e->getMessage(), 422, $e->errors());
@@ -74,7 +82,7 @@ class ProductoController extends Controller
                 'id' => $producto->id,
                 'NombreComun' => $producto->NombreComun,
                 'NombreCientifico' => $producto->NombreCientifico,
-                'TPEspecieid' => $producto->TPEspecieid,
+                'TPEspecieid' => $producto->especie->NombreEspecie,
                 'created_at' => $producto->created_at,
                 'updated_at' => $producto->updated_at,
             ];
@@ -92,22 +100,30 @@ class ProductoController extends Controller
     public function update(Request $request, $id)
     {
         try {
-            $request->validate([
+            $data = $request->validate([
                 'NombreComun' => 'required|string|max:50',
                 'NombreCientifico' => 'required|string|max:50',
                 'TPEspecieid' => 'required|integer',
             ]);
 
-            $existeProducto = Producto::where('NombreComun', $request->NombreComun)
-                ->where('NombreCientifico', $request->NombreCientifico)
-                ->where('TPEspecieid', $request->TPEspecieid)
+            // Verifica la existencia del producto por su nombre común o científico
+            $existeProducto = Producto::where('NombreComun', $data['NombreComun'])
+                ->orWhere('NombreCientifico', $data['NombreCientifico'])
                 ->first();
+
             if ($existeProducto) {
-                return ApiResponse::error('El producto ya existe', 422);
+                $errors = [];
+                if ($existeProducto->NombreComun === $data['NombreComun']) {
+                    $errors['NombreComun'] = ['El nombre común ya existe'];
+                }
+                if ($existeProducto->NombreCientifico === $data['NombreCientifico']) {
+                    $errors['NombreCientifico'] = ['El nombre científico ya existe'];
+                }
+                return ApiResponse::error('El producto ya existe', 422, $errors);
             }
 
             $producto = Producto::findOrFail($id);
-            $producto->update($request->all());
+            $producto->update($data);
             return ApiResponse::success('Producto actualizado exitosamente', 200, $producto);
         } catch (ValidationException $e) {
             return ApiResponse::error('Error de validación: ' . $e->getMessage(), 422, $e->errors());
