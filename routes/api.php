@@ -24,6 +24,7 @@ use App\Http\Controllers\MaterialCascoController;
 use App\Http\Controllers\UnidadEconomicaEmbMaController;
 use App\Http\Controllers\EquipoDeteccionController;
 use App\Http\Controllers\SistemaConservacionController;
+use App\Http\Controllers\EquipoSeguridadController;
 
 //Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
     //return $request->user();
@@ -53,3 +54,4 @@ Route::apiResource('materiales_casco', MaterialCascoController::class);
 Route::apiResource('unidades_economicas_emb_ma', UnidadEconomicaEmbMaController::class);
 Route::apiResource('equipos_deteccion', EquipoDeteccionController::class);
 Route::apiResource('sistemas_conservacion', SistemaConservacionController::class);
+Route::apiResource('equipos_seguridad', EquipoSeguridadController::class);
