@@ -18,13 +18,13 @@ class SocioDetallePAMoralController extends Controller
     public function index()
     {
         try {
-            $SociosDetallePAMoral = SocioDetallePAMoral::all();
-            $result = $SociosDetallePAMoral->map(function ($item) {
+            $sociosdetallespamoral = SocioDetallePAMoral::all();
+            $result = $sociosdetallespamoral->map(function ($item) {
                 return [
                     'id' => $item->id,
                     'CURP' => $item->CURP,
-                    'ActvPesca' => $item->ActvPesca,
-                    'ActvAcuacultura' => $item->ActvAcuacultura,
+                    'ActvPesca' => $item->ActvPesca ? 'Si' : 'No',
+                    'ActvAcuacultura' => $item->ActvAcuacultura ? 'Si' : 'No',
                     'DocActaNacimiento' => $item->DocActaNacimiento,
                     'DocComprobanteDomicilio' => $item->DocComprobanteDomicilio,
                     'DocCURP' => $item->DocCURP,
@@ -47,7 +47,7 @@ class SocioDetallePAMoralController extends Controller
     public function store(Request $request)
     {
         try {
-            $request->validate([
+            $data = $request->validate([
                 'CURP' => 'required|string|max:18',
                 'ActvPesca' => 'required|boolean',
                 'ActvAcuacultura' => 'required|boolean',
@@ -59,14 +59,16 @@ class SocioDetallePAMoralController extends Controller
                 'UEPAMid' => 'required|integer',
             ]);
 
-
-            $existeSocio = SocioDetallePAMoral::where('CURP', $request->CURP)
-            ->first();
+            $existeSocio = SocioDetallePAMoral::where('CURP', $data['CURP'])->first();
             if ($existeSocio) {
-                return ApiResponse::error('Ya existe un Socio con la CURP: ' . $request->CURP, 409);
+                $errors = [];
+                if ($existeSocio->CURP === $data['CURP']) {
+                    $errors['CURP'] = ['La CURP ya esta registrada'];
+                }
+                return ApiResponse::error('El socio ya existe', 422, $errors);
             }
 
-            $SocioDetallePAMoral = SocioDetallePAMoral::create($request->all());
+            $SocioDetallePAMoral = SocioDetallePAMoral::create($data);
             return ApiResponse::success('Socio registrado', 201, $SocioDetallePAMoral);
         } catch (ValidationException $e) {
             return ApiResponse::error('Error de validación: ' . $e->getMessage(), 422, $e->errors());
@@ -110,7 +112,7 @@ class SocioDetallePAMoralController extends Controller
     public function update(Request $request, $id)
     {
         try{
-            $request->validate([
+            $data = $request->validate([
                 'CURP' => 'required|string|max:18',
                 'ActvPesca' => 'required|boolean',
                 'ActvAcuacultura' => 'required|boolean',
@@ -122,14 +124,20 @@ class SocioDetallePAMoralController extends Controller
                 'UEPAMid' => 'required|integer',
             ]);
 
-            $existeSocio = SocioDetallePAMoral::where('CURP', $request->CURP)
+            $existeSocio = SocioDetallePAMoral::where('id', '!=', $id)
+            ->where('CURP', $data['CURP'])
             ->first();
+
             if ($existeSocio) {
-                return ApiResponse::error('Ya existe un Socio con la CURP: ' . $request->CURP, 409);
+                $errors = [];
+                if ($existeSocio->CURP === $data['CURP']) {
+                    $errors['CURP'] = ['La CURP ya esta registrada'];
+                }
+                return ApiResponse::error('El socio ya existe', 422, $errors);
             }
 
             $SocioDetallePAMoral = SocioDetallePAMoral::findOrfail($id);
-            $SocioDetallePAMoral->update($request->all());
+            $SocioDetallePAMoral->update($data);
             return ApiResponse::success('Socio actualizado', 200, $SocioDetallePAMoral);
         } catch (ValidationException $e) {
             return ApiResponse::error('Error de validación: ' . $e->getMessage(), 422, $e->errors());
