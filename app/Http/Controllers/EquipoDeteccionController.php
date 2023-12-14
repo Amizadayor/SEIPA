@@ -59,7 +59,7 @@ class EquipoDeteccionController extends Controller
      */
     public function show($id)
     {
-        try{
+        try {
             $EquipoDeteccion = EquipoDeteccion::findOrFail($id);
             $result = [
                 'id' => $EquipoDeteccion->id,
@@ -72,7 +72,7 @@ class EquipoDeteccionController extends Controller
         } catch (ModelNotFoundException $e) {
             return ApiResponse::error('Equipo de detección no encontrado', 404);
         } catch (Exception $e) {
-            return ApiResponse::error('Error al obtener el equipo de detección: ' , 500);
+            return ApiResponse::error('Error al obtener el equipo de detección: ', 500);
         }
     }
 
@@ -81,7 +81,7 @@ class EquipoDeteccionController extends Controller
      */
     public function update(Request $request, $id)
     {
-        try{
+        try {
             $data = $request->validate([
                 'NombreEquipo' => 'required|string|max:50|alpha',
             ]);
@@ -108,14 +108,14 @@ class EquipoDeteccionController extends Controller
      */
     public function destroy($id)
     {
-        try{
+        try {
             $EquipoDeteccion = EquipoDeteccion::findOrFail($id);
             $EquipoDeteccion->delete();
             return ApiResponse::success('Equipo de detección eliminado exitosamente', 200);
         } catch (ModelNotFoundException $e) {
             return ApiResponse::error('Equipo de detección no encontrado', 404);
         } catch (Exception $e) {
-            return ApiResponse::error('Error al eliminar el equipo de detección: ' , 500);
+            return ApiResponse::error('Error al eliminar el equipo de detección: ', 500);
         }
     }
 }
