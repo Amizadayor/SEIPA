@@ -21,6 +21,7 @@ use App\Http\Controllers\SocioDetallePAMoralController;
 use App\Http\Controllers\TipoActividadController;
 use App\Http\Controllers\TipoCubiertaController;
 use App\Http\Controllers\MaterialCascoController;
+use App\Http\Controllers\UnidadEconomicaEmbMaController;
 
 //Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
     //return $request->user();
@@ -47,3 +48,4 @@ Route::apiResource('socios_detalles_pa_moral', SocioDetallePAMoralController::cl
 Route::apiResource('tipos_actividad', TipoActividadController::class);
 Route::apiResource('tipos_cubierta', TipoCubiertaController::class);
 Route::apiResource('materiales_casco', MaterialCascoController::class);
+Route::apiResource('unidades_economicas_emb_ma', UnidadEconomicaEmbMaController::class);
