@@ -19,6 +19,7 @@ use App\Http\Controllers\PermisoPescaController;
 use App\Http\Controllers\UnidadEconomicaPAMoralController;
 use App\Http\Controllers\SocioDetallePAMoralController;
 use App\Http\Controllers\TipoActividadController;
+use App\Http\Controllers\TipoCubiertaController;
 
 //Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
     //return $request->user();
@@ -43,3 +44,4 @@ Route::apiResource('permisos_pesca', PermisoPescaController::class);
 Route::apiResource('unidades_economicas_pa_moral', UnidadEconomicaPAMoralController::class);
 Route::apiResource('socios_detalles_pa_moral', SocioDetallePAMoralController::class);
 Route::apiResource('tipos_actividad', TipoActividadController::class);
+Route::apiResource('tipos_cubierta', TipoCubiertaController::class);
