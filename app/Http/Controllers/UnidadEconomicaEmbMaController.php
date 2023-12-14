@@ -92,20 +92,20 @@ class UnidadEconomicaEmbMaController extends Controller
                 'DocCertificadoSegEmbs' => 'required|string|max:255',
             ]);
 
-            $existUEEMMA = UnidadEconomicaEmbMa::where('RNPA', $data['RNPA'])
+            $existeUEEMMA = UnidadEconomicaEmbMa::where('RNPA', $data['RNPA'])
                 ->orwhere('NombreEmbMayor', $data['NombreEmbMayor'])
                 ->orwhere('Matricula', $data['Matricula'])
                 ->first();
 
-            if ($existUEEMMA) {
+            if ($existeUEEMMA) {
                 $errors = [];
-                if ($existUEEMMA->RNPA == $data['RNPA']) {
+                if ($existeUEEMMA->RNPA == $data['RNPA']) {
                     $errors['RNPA'] = 'El RNPA ya esta registrado';
                 }
-                if ($existUEEMMA->NombreEmbMayor == $data['NombreEmbMayor']) {
+                if ($existeUEEMMA->NombreEmbMayor == $data['NombreEmbMayor']) {
                     $errors['NombreEmbMayor'] = 'El nombre de la embarcación mayor ya esta registrado';
                 }
-                if ($existUEEMMA->Matricula == $data['Matricula']) {
+                if ($existeUEEMMA->Matricula == $data['Matricula']) {
                     $errors['Matricula'] = 'La matrícula ya esta registrada';
                 }
                 return ApiResponse::error('La embarcación mayor ya existe', 422, $errors);
