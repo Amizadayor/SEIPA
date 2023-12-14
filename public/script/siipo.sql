@@ -268,7 +268,7 @@ CREATE TABLE unidades_economicas_emb_ma (
 
 CREATE TABLE equipos_deteccion (
     id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
-    NombreEquipoDeteccion VARCHAR(50),
+    NombreEquipo VARCHAR(50),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
