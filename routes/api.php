@@ -26,6 +26,7 @@ use App\Http\Controllers\EquipoDeteccionController;
 use App\Http\Controllers\SistemaConservacionController;
 use App\Http\Controllers\EquipoSeguridadController;
 use App\Http\Controllers\EquipoSalvamentoController;
+use App\Http\Controllers\EquipoContraincendioController;
 
 //Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
     //return $request->user();
@@ -57,3 +58,4 @@ Route::apiResource('equipos_deteccion', EquipoDeteccionController::class);
 Route::apiResource('sistemas_conservacion', SistemaConservacionController::class);
 Route::apiResource('equipos_seguridad', EquipoSeguridadController::class);
 Route::apiResource('equipos_salvamento', EquipoSalvamentoController::class);
+Route::apiResource('equipos_contraincendio', EquipoContraincendioController::class);
