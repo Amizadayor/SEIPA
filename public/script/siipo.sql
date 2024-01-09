@@ -294,7 +294,7 @@ CREATE TABLE equipos_salvamento (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
-CREATE TABLE equipos_contraindencio ( ------ AGREGAR ------
+CREATE TABLE equipos_contraincendio ( ------ AGREGAR ------
     id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
     NombreEquipoContraIncendio VARCHAR(50) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
