@@ -294,21 +294,21 @@ CREATE TABLE equipos_salvamento (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
-CREATE TABLE equipos_contraindencio (
+CREATE TABLE equipos_contraindencio ( ------ AGREGAR ------
     id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
     NombreEquipoContraIncendio VARCHAR(50) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
-CREATE TABLE equipos_comunicacion (
+CREATE TABLE equipos_comunicacion ( ------ AGREGAR ------
     id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
     NombreEquipoComunicacion VARCHAR(50) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
-CREATE TABLE equipos_navegacion (
+CREATE TABLE equipos_navegacion ( ------ AGREGAR ------
     id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
     NombreEquipoNavegacion VARCHAR(50) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -515,7 +515,7 @@ CREATE TABLE unidades_economicas_emb_me(
     FOREIGN KEY (MtrlCascoid) REFERENCES materiales_casco(id)
 );
 
-CREATE TABLE tipos_motor (
+CREATE TABLE tipos_motor ( ------ AGREGAR ------
     id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
     NombreTipoMotor VARCHAR(50) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -630,7 +630,7 @@ CREATE TABLE especies_objetivo_por_ia (
     FOREIGN KEY (EspObjetivoid) REFERENCES especies(id)
 );
 
-CREATE TABLE tipos_activo (
+CREATE TABLE tipos_activo ( ------ AGREGAR ------
     id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
     NombreActivo VARCHAR(100) UNIQUE NOT NULL,
     Clave VARCHAR(6) NOT NULL,
