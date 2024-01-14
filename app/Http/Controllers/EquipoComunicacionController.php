@@ -40,7 +40,7 @@ class EquipoComunicacionController extends Controller
     {
         try{
             $data = $request->validate([
-                'NombreEquipoComunicacion' => 'required|string|max:50|alpha',
+                'NombreEquipoComunicacion' => 'required|string|max:50',
             ]);
 
             $existeEquipoComunicacion = EquipoComunicacion::where($data)->exists();
@@ -84,7 +84,7 @@ class EquipoComunicacionController extends Controller
     {
         try{
             $data = $request->validate([
-                'NombreEquipoComunicacion' => 'required|string|max:50|alpha',
+                'NombreEquipoComunicacion' => 'required|string|max:50',
             ]);
 
             $existeEquipoComunicacion = EquipoComunicacion::where($data)->exists();
