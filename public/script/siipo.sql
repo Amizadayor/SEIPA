@@ -1,6 +1,6 @@
-DROP DATABASE IF EXISTS siipo;
-CREATE DATABASE siipo;
-USE siipo;
+DROP DATABASE IF EXISTS seipa;
+CREATE DATABASE seipa;
+USE seipa;
 
 CREATE TABLE roles ( -- Tabla de Roles para el Usuario
     id INT AUTO_INCREMENT PRIMARY KEY NOT NULL, -- Identificador del rol
@@ -232,6 +232,8 @@ CREATE TABLE materiales_casco ( -- Tabla para los materiales de casco
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
+
+
 CREATE TABLE unidades_economicas_emb_ma (
     id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
     RNPA VARCHAR(10),
@@ -294,14 +296,14 @@ CREATE TABLE equipos_salvamento (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
-CREATE TABLE equipos_contraincendio ( ------ AGREGAR ------
+CREATE TABLE equipos_contraincendio (
     id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
     NombreEquipoContraIncendio VARCHAR(50) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
-CREATE TABLE equipos_comunicacion ( ------ AGREGAR ------
+CREATE TABLE equipos_comunicacion (
     id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
     NombreEquipoComunicacion VARCHAR(50) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -779,12 +781,3 @@ FROM solicitudes
 INNER JOIN tipos_proceso ON solicitudes.TPProcesoid = tipos_proceso.id
 INNER JOIN tipos_modalidad ON solicitudes.TPModalidadid = tipos_modalidad.id
 INNER JOIN tipos_solicitud ON solicitudes.TPSolicitudid = tipos_solicitud.id;
-
-
----- Indices ----
-
-CREATE INDEX idx_NombreRol ON roles(NombreRol); -- Indice para el nombre del rol
-
-CREATE INDEX idx_Curp ON users(CURP); -- Indice para la curp del usuario
-CREATE INDEX idx_Email ON users(Email); -- Indice para la curp del usuario
-CREATE INDEX idx_Rolid ON users(Rolid); -- Indice para el rol del usuario
