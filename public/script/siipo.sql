@@ -1,233 +1,233 @@
-DROP DATABASE IF EXISTS seipa;
-CREATE DATABASE seipa;
-USE seipa;
+DROP DATABASE IF EXISTS sipo;
+CREATE DATABASE sipo;
+USE sipo;
 
-CREATE TABLE roles ( -- Tabla de Roles para el Usuario
-    id INT AUTO_INCREMENT PRIMARY KEY NOT NULL, -- Identificador del rol
-    NombreRol VARCHAR(20) UNIQUE NOT NULL, -- Nombre del rol
+CREATE TABLE roles (
+    id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    NombreRol VARCHAR(20) UNIQUE NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
-CREATE TABLE users ( -- Tabla de Usuarios
-    id INT AUTO_INCREMENT PRIMARY KEY NOT NULL, -- Identificador del usuario
-    Nombre VARCHAR(30) NOT NULL, -- Nombre del usuario
-    CURP VARCHAR(18) UNIQUE NOT NULL, -- Curp del usuario
-    Email VARCHAR(30), -- Correo electrónico del usuario
-    Password VARCHAR(20) NOT NULL, -- Contraseña del usuario
-    Rolid INT NOT NULL, -- Identificador del rol del usuario
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    Nombre VARCHAR(30) NOT NULL,
+    CURP VARCHAR(18) UNIQUE NOT NULL,
+    Email VARCHAR(30),
+    Password VARCHAR(20) NOT NULL,
+    Rolid INT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (Rolid) REFERENCES roles(id) -- Llave foránea del rol del usuario con el identificador del rol-Rolid
+    FOREIGN KEY (Rolid) REFERENCES roles(id)
 );
 
-CREATE TABLE permisos ( -- Tabla para los permisos
-    id INT AUTO_INCREMENT PRIMARY KEY NOT NULL, -- Identificador del permiso
-    NombrePermiso VARCHAR(30) UNIQUE NOT NULL, -- Nombre del permiso
+CREATE TABLE permisos (
+    id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    NombrePermiso VARCHAR(30) UNIQUE NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
-CREATE TABLE asignacion_permisos ( -- Tabla para la asignación de permisos a los roles
-    id INT AUTO_INCREMENT PRIMARY KEY NOT NULL, -- Identificador del permiso asignado
-    Rolid INT NOT NULL, -- Identificador del rol
-    Perid INT NOT NULL, -- Identificador del permiso
-    Permitido BOOLEAN DEFAULT FALSE NOT NULL, -- Indica si el permiso está permitido o no
+CREATE TABLE asignacion_permisos (
+    id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    Rolid INT NOT NULL,
+    Perid INT NOT NULL,
+    Permitido BOOLEAN DEFAULT FALSE NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (Rolid) REFERENCES roles(id), -- Llave foránea del rol con el identificador del rol-Rolid
-    FOREIGN KEY (Perid) REFERENCES permisos(id) -- Llave foránea del permiso con el identificador del permiso-Perid
+    FOREIGN KEY (Rolid) REFERENCES roles(id),
+    FOREIGN KEY (Perid) REFERENCES permisos(id)
 );
 
-CREATE TABLE regiones ( -- Tabla para las regiones
-    id INT AUTO_INCREMENT PRIMARY KEY NOT NULL, -- Identificador de la región
-    NombreRegion VARCHAR(40) UNIQUE NOT NULL, -- Nombre de la región
+CREATE TABLE regiones (
+    id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    NombreRegion VARCHAR(40) UNIQUE NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
-CREATE TABLE distritos ( -- Tabla para los distritos
-    id INT AUTO_INCREMENT PRIMARY KEY NOT NULL, -- Identificador del distrito
-    NombreDistrito VARCHAR(30) UNIQUE NOT NULL, -- Nombre del distrito
-    Regid INT NOT NULL, -- Identificador de la región
+CREATE TABLE distritos (
+    id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    NombreDistrito VARCHAR(30) UNIQUE NOT NULL,
+    Regid INT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (Regid) REFERENCES regiones(id) -- Llave foránea de la región con el identificador de la región-Regid
+    FOREIGN KEY (Regid) REFERENCES regiones(id)
 );
 
-CREATE TABLE municipios ( -- Tabla para los municipios
-    id INT AUTO_INCREMENT PRIMARY KEY NOT NULL, -- Identificador del municipio
-    NombreMunicipio VARCHAR(30) NOT NULL, -- Nombre del municipio
-    Disid INT NOT NULL, -- Identificador del distrito
+CREATE TABLE municipios (
+    id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    NombreMunicipio VARCHAR(30) NOT NULL,
+    Disid INT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (Disid) REFERENCES distritos(id) -- Llave foránea del distrito con el identificador del distrito-Disid
+    FOREIGN KEY (Disid) REFERENCES distritos(id)
 );
 
-CREATE TABLE localidades ( -- Tabla para las localidades
-    id INT AUTO_INCREMENT PRIMARY KEY NOT NULL, -- Identificador de la localidad
-    NombreLocalidad VARCHAR(30) NOT NULL, -- Nombre de la localidad
-    Munid INT NOT NULL, -- Identificador del municipio
+CREATE TABLE localidades (
+    id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    NombreLocalidad VARCHAR(30) NOT NULL,
+    Munid INT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (Munid) REFERENCES municipios(id) -- Llave foránea del municipio con el identificador del municipio-Munid
+    FOREIGN KEY (Munid) REFERENCES municipios(id)
 );
 
-CREATE TABLE oficinas ( -- Tabla para las oficinas
-    id INT AUTO_INCREMENT PRIMARY KEY NOT NULL, -- Identificador de la oficina
-    NombreOficina VARCHAR(50) NOT NULL, -- Nombre de la oficina
-    Ubicacion VARCHAR(100) NOT NULL, -- Ubicación de la oficina
-    Telefono VARCHAR(10) NOT NULL, -- Teléfono de la oficina
-    Email VARCHAR(40) NOT NULL, -- Email de la oficina
+CREATE TABLE oficinas (
+    id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    NombreOficina VARCHAR(50) NOT NULL,
+    Ubicacion VARCHAR(100) NOT NULL,
+    Telefono VARCHAR(10) NOT NULL,
+    Email VARCHAR(40) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
 
 
-CREATE TABLE unidades_economicas_pa_fisico ( -- Tabla para las unidades económicas de personas físicas
-    id INT AUTO_INCREMENT PRIMARY KEY NOT NULL, -- Identificador de la unidad económica
-    Ofcid INT NOT NULL, -- Identificador de la oficina
-    FechaRegistro DATE NOT NULL, -- Fecha de registro de la unidad económica
-    RNPA VARCHAR(10), -- RNPA del pescador o acuicultor fisico
-    CURP VARCHAR(18) UNIQUE NOT NULL, -- CURP del pescador o acuicultor fisico
-    RFC VARCHAR(13), -- Rfc del pescador o acuicultor fisico
-    Nombres VARCHAR(50) NOT NULL, -- Nombres del pescador o acuicultor fisico
-    ApPaterno VARCHAR(30) NOT NULL, -- Apaterno del pescador o acuicultor fisico
-    ApMaterno VARCHAR(30) NOT NULL, -- Apaterno del pescador o acuicultor fisico
-    FechaNacimiento DATE NOT NULL, -- Fecha de nacimiento del pescador o acuicultor fisico
-    Sexo ENUM ('M', 'F') NOT NULL, -- Sexo del pescador o acuicultor fisico
-    GrupoSanguineo VARCHAR(4), -- Grupo sanguineo del pescador o acuicultor fisico
-    Email VARCHAR(40), -- Email del pescador o acuicultor fisico
-    Calle VARCHAR(100) NOT NULL, -- Calle del domicilio
-    NmExterior VARCHAR(6) NOT NULL, -- Número exterior del domicilio
-    NmInterior VARCHAR(6) NOT NULL, -- Número interior del domicilio
-    CodigoPostal VARCHAR(10), -- Código postal del domicilio
-    Locid INT NOT NULL, -- Identificador de la localidad
-    IniOperaciones DATE NOT NULL, -- Fecha de inicio de operaciones del pescador o acuicultor fisico
-    ActivoEmbMayor BOOLEAN DEFAULT FALSE NOT NULL, -- Indica si el pescador o acuicultor fisico tiene embarcaciones mayores
-    ActivoEmbMenor BOOLEAN DEFAULT FALSE NOT NULL, -- Indica si el pescador o acuicultor fisico tiene embarcaciones menores
-    ActvAcuacultura BOOLEAN DEFAULT FALSE NOT NULL, -- Indica si el pescador o acuicultor fisico tiene actividad de acuacultura
-    ActvPesca BOOLEAN DEFAULT FALSE NOT NULL, -- Indica si el pescador o acuicultor fisico tiene actividad de pesca
-    NmPrincipal VARCHAR(10) NOT NULL, -- Número del teléfono principal
-    TpPrincipal VARCHAR(20) NOT NULL, -- Tipo del teléfono principal
-    NmSecundario VARCHAR(10) NOT NULL, -- Número del teléfono secundario
-    TpSecundario VARCHAR(20) NOT NULL, -- Tipo del teléfono secundario
-    DocActaNacimiento VARCHAR(255) NOT NULL, -- Documento de acta de nacimiento del pescador o acuicultor fisico
-    DocComprobanteDomicilio VARCHAR(255) NOT NULL, -- Documento de comprobante de domicilio del pescador o acuicultor fisico
-    DocCURP VARCHAR(255) NOT NULL, -- Documento de CURP del pescador o acuicultor fisico
-    DocIdentificacionOfc VARCHAR(255) NOT NULL, -- Documento de identificación oficial del pescador o acuicultor fisico
-    DocRFC VARCHAR(255) NOT NULL, -- Documento de RFC del pescador o acuicultor fisico
+CREATE TABLE unidades_economicas_pa_fisico (
+    id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    Ofcid INT NOT NULL,
+    FechaRegistro DATE NOT NULL,
+    RNPA VARCHAR(10),
+    CURP VARCHAR(18) UNIQUE NOT NULL,
+    RFC VARCHAR(13),
+    Nombres VARCHAR(50) NOT NULL,
+    ApPaterno VARCHAR(30) NOT NULL,
+    ApMaterno VARCHAR(30) NOT NULL,
+    FechaNacimiento DATE NOT NULL,
+    Sexo ENUM ('M', 'F') NOT NULL,
+    GrupoSanguineo VARCHAR(4),
+    Email VARCHAR(40),
+    Calle VARCHAR(100) NOT NULL,
+    NmExterior VARCHAR(6) NOT NULL,
+    NmInterior VARCHAR(6) NOT NULL,
+    CodigoPostal VARCHAR(10),
+    Locid INT NOT NULL,
+    IniOperaciones DATE NOT NULL,
+    ActivoEmbMayor BOOLEAN DEFAULT FALSE NOT NULL,
+    ActivoEmbMenor BOOLEAN DEFAULT FALSE NOT NULL,
+    ActvAcuacultura BOOLEAN DEFAULT FALSE NOT NULL,
+    ActvPesca BOOLEAN DEFAULT FALSE NOT NULL,
+    NmPrincipal VARCHAR(10) NOT NULL,
+    TpPrincipal VARCHAR(20) NOT NULL,
+    NmSecundario VARCHAR(10) NOT NULL,
+    TpSecundario VARCHAR(20) NOT NULL,
+    DocActaNacimiento VARCHAR(255) NOT NULL,
+    DocComprobanteDomicilio VARCHAR(255) NOT NULL,
+    DocCURP VARCHAR(255) NOT NULL,
+    DocIdentificacionOfc VARCHAR(255) NOT NULL,
+    DocRFC VARCHAR(255) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (Ofcid) REFERENCES oficinas(id), -- Llave foránea de la oficina con el identificador de la oficina-Ofcid
-    FOREIGN KEY (Locid) REFERENCES localidades(id) -- Llave foránea de la localidad con el identificador de la localidad-Locid
+    FOREIGN KEY (Ofcid) REFERENCES oficinas(id),
+    FOREIGN KEY (Locid) REFERENCES localidades(id)
 );
 
-CREATE TABLE artes_pesca ( -- Tabla para las artes de pesca
-    id INT AUTO_INCREMENT PRIMARY KEY NOT NULL, -- Identificador del arte de pesca
-    NombreArtePesca VARCHAR(50) NOT NULL, -- Nombre del arte de pesca
+CREATE TABLE artes_pesca (
+    id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    NombreArtePesca VARCHAR(50) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
-CREATE TABLE especies ( -- Tabla para las especies
-    id INT AUTO_INCREMENT PRIMARY KEY NOT NULL, -- Identificador de la especie
-    NombreEspecie VARCHAR(50) NOT NULL, -- Nombre de la especie
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, --
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-);
-
-CREATE TABLE productos ( -- Tabla para los productos
-    id INT AUTO_INCREMENT PRIMARY KEY NOT NULL, -- Identificador del producto
-    NombreComun VARCHAR(50) NOT NULL, -- Nombre común del producto
-    NombreCientifico VARCHAR(100) NOT NULL, -- Nombre científico del producto
-    TPEspecieid INT NOT NULL, -- Identificador de la especie
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (TPEspecieid) REFERENCES especies(id) -- Llave foránea de la especie con el identificador de la especie-TPEspecieid
-);
-
-CREATE TABLE permisos_pesca ( -- Tabla para los permisos de pesca
-    id INT AUTO_INCREMENT PRIMARY KEY NOT NULL, -- Identificador del permiso de pesca
-    NombrePermiso VARCHAR(50) NOT NULL, -- Nombre del permiso de pesca
-    TPEspecieid INT NOT NULL, -- Identificador de la especie
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (TPEspecieid) REFERENCES especies(id) -- Llave foránea de la especie con el identificador de la especie-TPEspecieid
-);
-
-
-
-CREATE TABLE unidades_economicas_pa_moral ( -- Tabla para las unidades económicas para las cooperativas
-    id INT AUTO_INCREMENT PRIMARY KEY NOT NULL, -- Identificador de la unidad económica
-    UEDuenoid INT NOT NULL, -- Identificador de la unidad económica de cooperativas
-    Ofcid INT NOT NULL, -- Identificador de la oficina
-    FechaRegistro DATE NOT NULL, -- Fecha de registro de la unidad económica
-    RNPA VARCHAR(10) NOT NULL, -- RNPA de la cooperativa
-    RFC VARCHAR(13) NOT NULL, -- RFC de la cooperativa
-    RazonSocial VARCHAR(50) NOT NULL, -- Razón social de la cooperativa
-    Email VARCHAR(40),-- Email de la cooperativa
-    Calle VARCHAR(100) NOT NULL, -- Calle del domicilio
-    NmExterior VARCHAR(6) NOT NULL, -- Número exterior del domicilio
-    NmInterior VARCHAR(6) NOT NULL, -- Número interior del domicilio
-    CodigoPostal VARCHAR(10), -- Código postal del domicilio
-    LocID INT NOT NULL, -- Identificador de la localidad
-    NmPrincipal VARCHAR(10) NOT NULL, -- Número del teléfono principal
-    TpPrincipal VARCHAR(20) NOT NULL, -- Tipo del teléfono principal
-    NmSecundario VARCHAR(10) NOT NULL, -- Número del teléfono secundario
-    TpSecundario VARCHAR(20) NOT NULL, -- Tipo del teléfono secundario
-    IniOperaciones DATE NOT NULL, -- Fecha de inicio de operaciones de la cooperativa
-    ActvAcuacultura BOOLEAN DEFAULT FALSE NOT NULL, -- Indica si la cooperativa es de actividad de acuacultura
-    ActvPesca BOOLEAN DEFAULT FALSE NOT NULL, -- Indica si la cooperativa es de actividad de pesca
-    ActivoEmbMayor BOOLEAN DEFAULT FALSE NOT NULL, -- Indica si la cooperativa tiene embarcaciones mayores
-    ActivoEmbMenor BOOLEAN DEFAULT FALSE NOT NULL, -- Indica si la cooperativa tiene embarcaciones menores
-    CantidadPescadores INT, -- Cantidad de pescadores de la cooperativa
-    DocActaConstitutiva VARCHAR(255) NOT NULL, -- Documento de acta constitutiva de la cooperativa
-    DocActaAsamblea VARCHAR(255) NOT NULL, -- Documento de acta de asamblea de la cooperativa
-    DocRepresentanteLegal VARCHAR(255) NOT NULL, -- Documento del representante de la cooperativa
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (Ofcid) REFERENCES oficinas(id), -- Llave foránea de la oficina con el identificador de la oficina-Ofcid
-    FOREIGN KEY (Locid) REFERENCES localidades(id), -- Llave foránea de la localidad con el identificador de la localidad-Locid
-    FOREIGN KEY (UEDuenoid) REFERENCES unidades_economicas_pa_fisico(id) -- Llave foránea de la unidad económica de cooperativas con el identificador de la unidad económica de cooperativas-UEDuenoid
-);
-
-CREATE TABLE socios_detalles_pa_moral ( -- Tabla para los socios de las unidades económicas de cooperativas
-    id INT AUTO_INCREMENT PRIMARY KEY NOT NULL, -- Identificador del socio
-    CURP VARCHAR(18) NOT NULL, -- CURP del socio
-    ActvPesca BOOLEAN DEFAULT TRUE NOT NULL, -- Indica si el socio es pescador o acuicultor
-    ActvAcuacultura BOOLEAN DEFAULT TRUE NOT NULL, -- Indica si el socio es pescador o acuicultor
-    DocActaNacimiento VARCHAR(255) NOT NULL, -- Documento de acta de nacimiento del socio
-    DocComprobanteDomicilio VARCHAR(255) NOT NULL, -- Documento de comprobante de domicilio del socio
-    DocCURP VARCHAR(255) NOT NULL, -- Documento de CURP del socio
-    DocIdentificacionOfc VARCHAR(255) NOT NULL, -- Documento de identificación oficial del socio
-    DocRFC VARCHAR(255) NOT NULL, -- Documento de RFC del socio
-    UEPAMid INT NOT NULL, -- Identificador de la unidad económica de cooperativas
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (UEPAMid) REFERENCES unidades_economicas_pa_moral(id) -- Llave foránea de la unidad económica de cooperativas con el identificador de la unidad económica de cooperativas-UEPAMid
-);
-
-
-
-CREATE TABLE tipos_actividad ( -- Tabla para los tipos de actividad
-    id INT AUTO_INCREMENT PRIMARY KEY NOT NULL, -- Identificador del tipo de actividad
-    NombreTipoActividad VARCHAR(50) NOT NULL, -- Nombre del tipo de actividad
+CREATE TABLE especies (
+    id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    NombreEspecie VARCHAR(50) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
-CREATE TABLE tipos_cubierta ( -- Tabla para los tipos de cubierta
-    id INT AUTO_INCREMENT PRIMARY KEY NOT NULL, -- Identificador del tipo de cubierta
-    NombreTipoCubierta VARCHAR(50) NOT NULL, -- Nombre del tipo de cubierta
+CREATE TABLE productos (
+    id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    NombreComun VARCHAR(50) NOT NULL,
+    NombreCientifico VARCHAR(100) NOT NULL,
+    TPEspecieid INT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (TPEspecieid) REFERENCES especies(id)
+);
+
+CREATE TABLE permisos_pesca (
+    id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    NombrePermiso VARCHAR(50) NOT NULL,
+    TPEspecieid INT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (TPEspecieid) REFERENCES especies(id)
+);
+
+
+
+CREATE TABLE unidades_economicas_pa_moral (
+    id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    UEDuenoid INT NOT NULL,
+    Ofcid INT NOT NULL,
+    FechaRegistro DATE NOT NULL,
+    RNPA VARCHAR(10) NOT NULL,
+    RFC VARCHAR(13) NOT NULL,
+    RazonSocial VARCHAR(50) NOT NULL,
+    Email VARCHAR(40),
+    Calle VARCHAR(100) NOT NULL,
+    NmExterior VARCHAR(6) NOT NULL,
+    NmInterior VARCHAR(6) NOT NULL,
+    CodigoPostal VARCHAR(10),
+    LocID INT NOT NULL,
+    NmPrincipal VARCHAR(10) NOT NULL,
+    TpPrincipal VARCHAR(20) NOT NULL,
+    NmSecundario VARCHAR(10) NOT NULL,
+    TpSecundario VARCHAR(20) NOT NULL,
+    IniOperaciones DATE NOT NULL,
+    ActvAcuacultura BOOLEAN DEFAULT FALSE NOT NULL,
+    ActvPesca BOOLEAN DEFAULT FALSE NOT NULL,
+    ActivoEmbMayor BOOLEAN DEFAULT FALSE NOT NULL,
+    ActivoEmbMenor BOOLEAN DEFAULT FALSE NOT NULL,
+    CantidadPescadores INT,
+    DocActaConstitutiva VARCHAR(255) NOT NULL,
+    DocActaAsamblea VARCHAR(255) NOT NULL,
+    DocRepresentanteLegal VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (Ofcid) REFERENCES oficinas(id),
+    FOREIGN KEY (Locid) REFERENCES localidades(id),
+    FOREIGN KEY (UEDuenoid) REFERENCES unidades_economicas_pa_fisico(id)
+);
+
+CREATE TABLE socios_detalles_pa_moral (
+    id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    CURP VARCHAR(18) NOT NULL,
+    ActvPesca BOOLEAN DEFAULT TRUE NOT NULL,
+    ActvAcuacultura BOOLEAN DEFAULT TRUE NOT NULL,
+    DocActaNacimiento VARCHAR(255) NOT NULL,
+    DocComprobanteDomicilio VARCHAR(255) NOT NULL,
+    DocCURP VARCHAR(255) NOT NULL,
+    DocIdentificacionOfc VARCHAR(255) NOT NULL,
+    DocRFC VARCHAR(255) NOT NULL,
+    UEPAMid INT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (UEPAMid) REFERENCES unidades_economicas_pa_moral(id)
+);
+
+
+
+CREATE TABLE tipos_actividad (
+    id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    NombreTipoActividad VARCHAR(50) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
-CREATE TABLE materiales_casco ( -- Tabla para los materiales de casco
-    id INT AUTO_INCREMENT PRIMARY KEY NOT NULL, -- Identificador del material de casco
-    NombreMaterialCasco VARCHAR(50) NOT NULL, -- Nombre del material de casco
+CREATE TABLE tipos_cubierta (
+    id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    NombreTipoCubierta VARCHAR(50) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE materiales_casco (
+    id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    NombreMaterialCasco VARCHAR(50) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
@@ -379,11 +379,11 @@ CREATE TABLE equipos_salvamento_emb_ma (
 
 CREATE TABLE equipos_contraindencio_emb_ma (
     id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
-    EqpoContraIncendioid INT NOT NULL,
+    EqpoContraincendioid INT NOT NULL,
     UEEMMAid INT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (EqpoContraIncendioid) REFERENCES equipos_contraindencio(id),
+    FOREIGN KEY (EqpoContraincendioid) REFERENCES equipos_contraincendio(id),
     FOREIGN KEY (UEEMMAid) REFERENCES unidades_economicas_emb_ma(id)
 );
 
@@ -490,7 +490,7 @@ CREATE TABLE costos_operaciones_por_emb_ma (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (UEEMMAid) REFERENCES unidades_economicas_emb_ma(id),
-    FOREIGN KEY (COEMMA) REFERENCES costos_operaciones_emb_ma(id)
+    FOREIGN KEY (COEMMAid) REFERENCES costos_operaciones_emb_ma(id)
 );
 
 
@@ -767,8 +767,6 @@ CREATE TABLE solicitudes (
     FOREIGN KEY (TPModalidadid) REFERENCES tipos_modalidad(id),
     FOREIGN KEY (TPSolicitudid) REFERENCES tipos_solicitud(id)
 );
-
----- Vistas ----
 
 CREATE VIEW vista_solicitudes AS
 SELECT
