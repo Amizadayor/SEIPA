@@ -30,6 +30,7 @@ use App\Http\Controllers\EquipoContraincendioController;
 use App\Http\Controllers\EquipoComunicacionController;
 use App\Http\Controllers\EquipoNavegacionController;
 use App\Http\Controllers\TipoMotorController;
+use App\Http\Controllers\TipoActivoController;
 
 
 //Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
@@ -66,3 +67,4 @@ Route::apiResource('equipos_contraincendio', EquipoContraincendioController::cla
 Route::apiResource('equipos_comunicacion', EquipoComunicacionController::class);
 Route::apiResource('equipos_navegacion', EquipoNavegacionController::class);
 Route::apiResource('tipos_motor', TipoMotorController::class);
+Route::apiResource('tipos_activo', TipoActivoController::class);
