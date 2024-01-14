@@ -68,7 +68,7 @@ class EquipoContraincendioController extends Controller
                 'updated_at' => $EquipoContraincendio->updated_at,
             ];
 
-            return ApiResponse::success('Equipo de contraincendio obtenido exitosamente.', 200, $EquipoContraincendio);
+            return ApiResponse::success('Equipo de contraincendio obtenido exitosamente.', 200, $result);
         } catch (ModelNotFoundException $e) {
             return ApiResponse::error('Error al obtener el equipo de contraincendio: ' . $e->getMessage(), 404);
         } catch (Exception $e) {
