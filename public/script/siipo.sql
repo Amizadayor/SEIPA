@@ -310,7 +310,7 @@ CREATE TABLE equipos_comunicacion (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
-CREATE TABLE equipos_navegacion ( ------ AGREGAR ------
+CREATE TABLE equipos_navegacion (
     id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
     NombreEquipoNavegacion VARCHAR(50) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -517,7 +517,7 @@ CREATE TABLE unidades_economicas_emb_me(
     FOREIGN KEY (MtrlCascoid) REFERENCES materiales_casco(id)
 );
 
-CREATE TABLE tipos_motor ( ------ AGREGAR ------
+CREATE TABLE tipos_motor (
     id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
     NombreTipoMotor VARCHAR(50) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
