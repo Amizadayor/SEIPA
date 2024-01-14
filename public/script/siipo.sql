@@ -632,7 +632,7 @@ CREATE TABLE especies_objetivo_por_ia (
     FOREIGN KEY (EspObjetivoid) REFERENCES especies(id)
 );
 
-CREATE TABLE tipos_activo ( ------ AGREGAR ------
+CREATE TABLE tipos_activo (
     id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
     NombreActivo VARCHAR(100) UNIQUE NOT NULL,
     Clave VARCHAR(6) NOT NULL,
