@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('localidades', function (Blueprint $table) {
             $table->id();
-            $table->string('NombreLocalidades', 50)->nullable();
+            $table->string('NombreLocalidad', 50)->nullable();
             $table->unsignedBigInteger('Munid');
 
             $table->foreign('Munid')->references('id')->on('municipios');
