@@ -104,15 +104,19 @@ CREATE TABLE unidades_economicas_pa_fisico (
     NmInterior VARCHAR(6) NOT NULL,
     CodigoPostal VARCHAR(10),
     Locid INT NOT NULL,
-    IniOperaciones DATE NOT NULL,
-    ActivoEmbMayor BOOLEAN DEFAULT FALSE NOT NULL,
-    ActivoEmbMenor BOOLEAN DEFAULT FALSE NOT NULL,
-    ActvAcuacultura BOOLEAN DEFAULT FALSE NOT NULL,
-    ActvPesca BOOLEAN DEFAULT FALSE NOT NULL,
     NmPrincipal VARCHAR(10) NOT NULL,
     TpPrincipal VARCHAR(20) NOT NULL,
     NmSecundario VARCHAR(10) NOT NULL,
     TpSecundario VARCHAR(20) NOT NULL,
+    IniOperaciones DATE NOT NULL,
+    ActvAcuacultura BOOLEAN DEFAULT FALSE NOT NULL,
+    ActvCaptura BOOLEAN DEFAULT FALSE NOT NULL,
+    AguasFederales BOOLEAN DEFAULT FALSE NOT NULL,
+    ExtraccionManual BOOLEAN DEFAULT FALSE NOT NULL,
+    ColAcuacultores VARCHAR(10),
+    ColPescadores VARCHAR(10),
+    ActivoEmbMayor BOOLEAN DEFAULT FALSE NOT NULL,
+    ActivoEmbMenor BOOLEAN DEFAULT FALSE NOT NULL,
     DocActaNacimiento VARCHAR(255) NOT NULL,
     DocComprobanteDomicilio VARCHAR(255) NOT NULL,
     DocCURP VARCHAR(255) NOT NULL,
@@ -122,6 +126,16 @@ CREATE TABLE unidades_economicas_pa_fisico (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (Ofcid) REFERENCES oficinas(id),
     FOREIGN KEY (Locid) REFERENCES localidades(id)
+);
+
+CREATE TABLE colaboradores_fisicos (
+    id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    CURP VARCHAR(18) UNIQUE NOT NULL,
+    TpColaborador VARCHAR(20) NOT NULL,
+    UEPAFI_id INT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (UEPAFI_id) REFERENCES unidades_economicas_pa_fisico(id)
 );
 
 CREATE TABLE artes_pesca (
